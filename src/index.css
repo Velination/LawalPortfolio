@@ -1,0 +1,161 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,700&display=swap');
+@import 'tailwindcss';
+
+/* ── Keyframes ─────────────────────────────────────────────── */
+
+@keyframes proSlideOut {
+  from { opacity: 1; }
+  to   { opacity: 0; }
+}
+
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+@keyframes marqueeLogos {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+@keyframes blobA {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33%       { transform: translate(50px, -40px) scale(1.1); }
+  66%       { transform: translate(-20px, 30px) scale(0.95); }
+}
+
+@keyframes blobB {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33%       { transform: translate(-40px, 50px) scale(1.08); }
+  66%       { transform: translate(30px, -20px) scale(0.96); }
+}
+
+@keyframes blobC {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50%       { transform: translate(25px, 35px) scale(1.06); }
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes modalIn {
+  from { opacity: 0; transform: translateY(30px) scale(0.97); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes overlayIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* ── Base ──────────────────────────────────────────────────── */
+
+body {
+  background-color: #0a0a0a;
+  color: #eeece8;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  margin: 0;
+}
+
+* { box-sizing: border-box; }
+::-webkit-scrollbar { width: 0; height: 0; }
+
+/* ── Animation helpers ─────────────────────────────────────── */
+
+.anim-in   { animation: fadeUp 0.7s ease both; }
+.anim-in-2 { animation: fadeUp 0.7s ease 0.1s both; }
+.anim-in-3 { animation: fadeUp 0.7s ease 0.22s both; }
+.anim-in-4 { animation: fadeUp 0.7s ease 0.35s both; }
+
+/* ── Pill buttons ──────────────────────────────────────────── */
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.75rem 1.75rem;
+  border-radius: 100px;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  cursor: pointer;
+  transition: opacity 0.18s, background 0.18s;
+  text-decoration: none;
+  border: none;
+  white-space: nowrap;
+}
+.pill-gold  { background: #E8B84B; color: #0a0a0a; }
+.pill-gold:hover { opacity: 0.82; }
+.pill-ghost {
+  background: rgba(238,236,232,0.07);
+  color: #eeece8;
+  border: 1px solid rgba(238,236,232,0.13);
+}
+.pill-ghost:hover { background: rgba(238,236,232,0.13); }
+
+/* ── Work card hover ───────────────────────────────────────── */
+
+.work-card {
+  border: 1px solid rgba(238,236,232,0.07);
+  border-radius: 16px;
+  overflow: hidden;
+  transition: border-color 0.3s, transform 0.3s;
+  cursor: default;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+.work-card:hover {
+  border-color: rgba(232,184,75,0.35);
+  transform: translateY(-6px);
+}
+.work-card:hover .card-img {
+  transform: scale(1.04);
+}
+.card-img {
+  transition: transform 0.5s ease;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* ── Contact form fields ───────────────────────────────────── */
+
+.cf-field {
+  width: 100%;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid rgba(238,236,232,0.15);
+  color: #eeece8;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 1rem;
+  font-weight: 400;
+  padding: 0.75rem 0;
+  outline: none;
+  transition: border-color 0.2s;
+  resize: none;
+}
+.cf-field::placeholder { color: rgba(238,236,232,0.3); }
+.cf-field:focus { border-bottom-color: #E8B84B; }
+
+/* ── Responsive ────────────────────────────────────────────── */
+
+@media (max-width: 960px) {
+  .cards-row { flex-direction: column !important; }
+  .cards-row .work-card { margin-top: 0 !important; }
+  .about-3col { grid-template-columns: 1fr !important; }
+  .about-3col .col-photo { display: none !important; }
+  .skills-grid { grid-template-columns: 1fr 1fr !important; }
+  .phq-flow-steps { grid-template-columns: 1fr 1fr !important; }
+  .phq-flow-grid { grid-template-columns: 1fr 1fr !important; }
+}
+@media (max-width: 600px) {
+  .skills-grid { grid-template-columns: 1fr !important; }
+  .phq-flow-steps { grid-template-columns: 1fr 1fr !important; }
+  .phq-flow-grid { grid-template-columns: 1fr 1fr !important; }
+}

@@ -1,0 +1,10 @@
+{
+  "description": "Showcases a product designer's portfolio with projects, skills, and contact info, highlighting expertise in UI/UX and innovative design solutions.",
+  "robots": {
+    "index": false
+  },
+  "accessibility": {
+    "addBypassLinks": false,
+    "ignoreReducedMotion": false
+  }
+}
