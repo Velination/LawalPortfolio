@@ -1,12 +1,12 @@
 import { useState, useEffect, useRef, type FormEvent } from 'react'
 import DeviceMockupImport from './imports/DeviceMockup'
 import SbVideoMockup from './imports/Video'
-import logoSVG from './imports/Group.svg'
+import logoSVG from './imports/Groups.svg'
 import photo1 from './imports/073A0096-Edit.JPG.jpeg'
 import photo2 from './imports/073A0053-Edit.jpg.jpeg'
 import photo3 from './imports/073A0069.jpg.jpeg'
-import photoArms from './imports/073A0080-Edit.JPG_1.png'
-import photoSuit from './imports/073A0096-Edit.JPG_1.png'
+import photoArms from './imports/073A0080-Edit.JPG_1.svg'
+import photoSuit from './imports/073A0096-Edit.JPG_1.svg'
 import photoFolded from './imports/073A0080.png'
 import logoKawts from './imports/Kawts-2.png'
 import logoRivnl from './imports/RIVNL-2.png'
@@ -63,6 +63,19 @@ import mqPro1 from './imports/MyQura_Professional_1.png'
 import mqPro2 from './imports/MyQura_Professional_2.png'
 import mqPro3 from './imports/MyQura_Professional_3.png'
 import mqAdmin from './imports/Admin_Portal.png'
+
+import figmaLogo from './imports/figma.svg'
+import midjourneyLogo from './imports/midjourney.svg'
+import khromaLogo from './imports/khroma.svg'
+import visilyLogo from './imports/visily.svg'
+import claudeLogo from './imports/claude.svg'
+import notionLogo from './imports/notion.svg'
+import dovetailLogo from './imports/dovetail.svg'
+import loomLogo from './imports/loom.svg'
+import framerLogo from './imports/framer.svg'
+import miroLogo from './imports/miro.svg'
+import groupLogo from './imports/group.svg'
+import TelloLogo from './imports/tello.svg'
 
 type Page = 'home' | 'about' | 'projects' | 'myqura' | 'proshq' | 'surebase'
 
@@ -149,42 +162,64 @@ function Ambient({ cursorX, cursorY }: { cursorX: number; cursorY: number }) {
 
 // ── Contact modal ─────────────────────────────────────────────────────────────
 
-function ContactModal({ onClose }: { onClose: () => void }) {
-  const [form, setForm] = useState({ name: '', email: '', subject: '', message: '' })
-  const [sent, setSent] = useState(false)
-  const [focused, setFocused] = useState<string | null>(null)
+type ContactForm = {
+  name: string
+  email: string
+  subject: string
+  message: string
+}
 
-  const set = (k: keyof typeof form) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
-    setForm(f => ({ ...f, [k]: e.target.value }))
+type FieldProps = {
+  label: string
+  id: keyof ContactForm
+  type?: string
+  multiline?: boolean
+  value: string
+  onChange: (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => void
+  focused: keyof ContactForm | null
+  setFocused: (id: keyof ContactForm | null) => void
+}
 
-  const handleSubmit = (e: FormEvent) => {
-    e.preventDefault()
-    const body = `Hi Lawal,\n\nName: ${form.name}\nEmail: ${form.email}\n\n${form.message}`
-    window.location.href = `mailto:lajimohofficial@gmail.com?subject=${encodeURIComponent(form.subject || 'Portfolio Enquiry')}&body=${encodeURIComponent(body)}`
-    setSent(true)
-  }
-
-  useEffect(() => {
-    const fn = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose() }
-    document.addEventListener('keydown', fn)
-    return () => document.removeEventListener('keydown', fn)
-  }, [onClose])
-
-  const Field = ({ label, id, type = 'text', multiline = false }: { label: string; id: keyof typeof form; type?: string; multiline?: boolean }) => (
+// IMPORTANT:
+// Keep Field OUTSIDE ContactModal.
+// This prevents the input from losing focus whenever the form state changes.
+function Field({
+  label,
+  id,
+  type = 'text',
+  multiline = false,
+  value,
+  onChange,
+  focused,
+  setFocused,
+}: FieldProps) {
+  return (
     <div style={{ marginBottom: '2rem' }}>
-      <label style={{
-        display: 'block', fontFamily: C.font, fontSize: '0.68rem',
-        fontWeight: 700, letterSpacing: '0.16em', textTransform: 'uppercase',
-        color: focused === id ? C.gold : C.dim, marginBottom: '0.5rem',
-        transition: 'color 0.2s',
-      }}>{label}</label>
+      <label
+        style={{
+          display: 'block',
+          fontFamily: C.font,
+          fontSize: '0.68rem',
+          fontWeight: 700,
+          letterSpacing: '0.16em',
+          textTransform: 'uppercase',
+          color: focused === id ? C.gold : C.dim,
+          marginBottom: '0.5rem',
+          transition: 'color 0.2s',
+        }}
+      >
+        {label}
+      </label>
+
       {multiline ? (
         <textarea
           className="cf-field"
           rows={4}
           placeholder={`Your ${label.toLowerCase()}…`}
-          value={form[id]}
-          onChange={set(id)}
+          value={value}
+          onChange={onChange}
           onFocus={() => setFocused(id)}
           onBlur={() => setFocused(null)}
         />
@@ -193,41 +228,119 @@ function ContactModal({ onClose }: { onClose: () => void }) {
           className="cf-field"
           type={type}
           placeholder={`Your ${label.toLowerCase()}…`}
-          value={form[id]}
-          onChange={set(id)}
+          value={value}
+          onChange={onChange}
           onFocus={() => setFocused(id)}
           onBlur={() => setFocused(null)}
         />
       )}
     </div>
   )
+}
+
+function ContactModal({ onClose }: { onClose: () => void }) {
+  const [form, setForm] = useState<ContactForm>({
+    name: '',
+    email: '',
+    subject: '',
+    message: '',
+  })
+
+  const [sent, setSent] = useState(false)
+  const [focused, setFocused] = useState<keyof ContactForm | null>(null)
+
+  const set = (key: keyof ContactForm) => (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    setForm(prev => ({
+      ...prev,
+      [key]: e.target.value,
+    }))
+  }
+
+  const handleSubmit = (e: FormEvent) => {
+    e.preventDefault()
+
+    const body = `Hi Lawal,
+
+Name: ${form.name}
+Email: ${form.email}
+
+${form.message}`
+
+    window.location.href =
+      `mailto:lajimohofficial@gmail.com?subject=${encodeURIComponent(
+        form.subject || 'Portfolio Enquiry'
+      )}&body=${encodeURIComponent(body)}`
+
+    setSent(true)
+  }
+
+  useEffect(() => {
+    const fn = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose()
+    }
+
+    document.addEventListener('keydown', fn)
+
+    return () => {
+      document.removeEventListener('keydown', fn)
+    }
+  }, [onClose])
 
   return (
-    <div style={{ position: 'fixed', inset: 0, zIndex: 500, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '1.5rem' }}>
+    <div
+      style={{
+        position: 'fixed',
+        inset: 0,
+        zIndex: 500,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: '1.5rem',
+      }}
+    >
       {/* Backdrop */}
       <div
         onClick={onClose}
-        style={{ position: 'absolute', inset: 0, background: 'rgba(5,5,5,0.8)', backdropFilter: 'blur(10px)', animation: 'overlayIn 0.25s ease both' }}
+        style={{
+          position: 'absolute',
+          inset: 0,
+          background: 'rgba(5,5,5,0.8)',
+          backdropFilter: 'blur(10px)',
+          animation: 'overlayIn 0.25s ease both',
+        }}
       />
 
       {/* Modal */}
-      <div style={{
-        position: 'relative', width: '100%', maxWidth: 520,
-        background: '#111214',
-        border: `1px solid rgba(238,236,232,0.1)`,
-        borderTop: `2px solid ${C.gold}`,
-        borderRadius: 16,
-        padding: '2.5rem',
-        animation: 'modalIn 0.3s cubic-bezier(0.22,1,0.36,1) both',
-        boxShadow: '0 40px 100px rgba(0,0,0,0.7)',
-      }}>
+      <div
+        style={{
+          position: 'relative',
+          width: '100%',
+          maxWidth: 520,
+          background: '#111214',
+          border: `1px solid rgba(238,236,232,0.1)`,
+          borderTop: `2px solid ${C.gold}`,
+          borderRadius: 16,
+          padding: '2.5rem',
+          animation: 'modalIn 0.3s cubic-bezier(0.22,1,0.36,1) both',
+          boxShadow: '0 40px 100px rgba(0,0,0,0.7)',
+        }}
+      >
         {/* Close */}
         <button
           onClick={onClose}
           style={{
-            position: 'absolute', top: '1.25rem', right: '1.25rem',
-            background: 'none', border: 'none', cursor: 'pointer',
-            color: C.dim, fontSize: '1.25rem', lineHeight: 1, padding: '0.25rem',
+            position: 'absolute',
+            top: '1.25rem',
+            right: '1.25rem',
+            background: 'none',
+            border: 'none',
+            cursor: 'pointer',
+            color: C.dim,
+            fontSize: '1.25rem',
+            lineHeight: 1,
+            padding: '0.25rem',
             transition: 'color 0.2s',
           }}
           onMouseEnter={e => (e.currentTarget.style.color = C.ink)}
@@ -238,28 +351,138 @@ function ContactModal({ onClose }: { onClose: () => void }) {
 
         {!sent ? (
           <>
-            <p style={{ fontFamily: C.font, fontSize: '0.7rem', fontWeight: 700, letterSpacing: '0.16em', textTransform: 'uppercase', color: C.gold, margin: '0 0 0.75rem' }}>Get in touch</p>
-            <h2 style={{ fontFamily: C.font, fontSize: 'clamp(1.5rem, 3vw, 2rem)', fontWeight: 800, color: C.ink, margin: '0 0 2.25rem', letterSpacing: '-0.02em', lineHeight: 1.15 }}>
-              Let&#39;s talk about<br />your project.
+            <p
+              style={{
+                fontFamily: C.font,
+                fontSize: '0.7rem',
+                fontWeight: 700,
+                letterSpacing: '0.16em',
+                textTransform: 'uppercase',
+                color: C.gold,
+                margin: '0 0 0.75rem',
+              }}
+            >
+              Get in touch
+            </p>
+
+            <h2
+              style={{
+                fontFamily: C.font,
+                fontSize: 'clamp(1.5rem, 3vw, 2rem)',
+                fontWeight: 800,
+                color: C.ink,
+                margin: '0 0 2.25rem',
+                letterSpacing: '-0.02em',
+                lineHeight: 1.15,
+              }}
+            >
+              Let&#39;s talk about
+              <br />
+              your project.
             </h2>
+
             <form onSubmit={handleSubmit}>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0 1.5rem' }}>
-                <Field label="Name" id="name" />
-                <Field label="Email" id="email" type="email" />
+              <div
+                style={{
+                  display: 'grid',
+                  gridTemplateColumns: '1fr 1fr',
+                  gap: '0 1.5rem',
+                }}
+              >
+                <Field
+                  label="Name"
+                  id="name"
+                  value={form.name}
+                  onChange={set('name')}
+                  focused={focused}
+                  setFocused={setFocused}
+                />
+
+                <Field
+                  label="Email"
+                  id="email"
+                  type="email"
+                  value={form.email}
+                  onChange={set('email')}
+                  focused={focused}
+                  setFocused={setFocused}
+                />
               </div>
-              <Field label="Subject" id="subject" />
-              <Field label="Message" id="message" multiline />
-              <button type="submit" className="pill pill-gold" style={{ width: '100%', justifyContent: 'center', marginTop: '0.5rem', padding: '1rem' }}>
+
+              <Field
+                label="Subject"
+                id="subject"
+                value={form.subject}
+                onChange={set('subject')}
+                focused={focused}
+                setFocused={setFocused}
+              />
+
+              <Field
+                label="Message"
+                id="message"
+                multiline
+                value={form.message}
+                onChange={set('message')}
+                focused={focused}
+                setFocused={setFocused}
+              />
+
+              <button
+                type="submit"
+                className="pill pill-gold"
+                style={{
+                  width: '100%',
+                  justifyContent: 'center',
+                  marginTop: '0.5rem',
+                  padding: '1rem',
+                }}
+              >
                 Send message →
               </button>
             </form>
           </>
         ) : (
           <div style={{ textAlign: 'center', padding: '2rem 0' }}>
-            <div style={{ fontSize: '2.5rem', marginBottom: '1rem' }}>✦</div>
-            <h3 style={{ fontFamily: C.font, fontSize: '1.5rem', fontWeight: 700, color: C.ink, margin: '0 0 0.75rem' }}>Message sent!</h3>
-            <p style={{ fontFamily: C.font, fontSize: '0.95rem', color: C.muted, marginBottom: '2rem' }}>Your email client should have opened. If not, reach out at lajimohofficial@gmail.com</p>
-            <button className="pill pill-ghost" onClick={onClose}>Close</button>
+            <div
+              style={{
+                fontSize: '2.5rem',
+                marginBottom: '1rem',
+              }}
+            >
+              ✦
+            </div>
+
+            <h3
+              style={{
+                fontFamily: C.font,
+                fontSize: '1.5rem',
+                fontWeight: 700,
+                color: C.ink,
+                margin: '0 0 0.75rem',
+              }}
+            >
+              Message sent!
+            </h3>
+
+            <p
+              style={{
+                fontFamily: C.font,
+                fontSize: '0.95rem',
+                color: C.muted,
+                marginBottom: '2rem',
+              }}
+            >
+              Your email client should have opened. If not, reach out at
+              lajimohofficial@gmail.com
+            </p>
+
+            <button
+              className="pill pill-ghost"
+              onClick={onClose}
+            >
+              Close
+            </button>
           </div>
         )}
       </div>
@@ -386,7 +609,7 @@ function WorkCards({ onViewAll, onMyQura, onProsHQ, onSurebase }: { onViewAll: (
             Selected Work
           </p>
           <h2 style={{ fontFamily: C.font, fontSize: 'clamp(1.6rem, 2.5vw, 2.2rem)', fontWeight: 800, color: C.ink, margin: 0, letterSpacing: '-0.02em' }}>
-            Three of ten.
+            Three of Many.
           </h2>
         </div>
         <button className="pill pill-ghost" onClick={onViewAll} style={{ fontSize: '0.8rem' }}>
@@ -779,45 +1002,98 @@ function HomePage({ setPage, onContact }: { setPage: (p: Page) => void; onContac
 
 // ── Tool chip ─────────────────────────────────────────────────────────────────
 
-function ToolChip({ name, abbr, accent }: { name: string; abbr: string; accent: string }) {
+function ToolChip({
+  name,
+  src,
+  accent,
+}: {
+  name: string
+  src: string
+  accent: string
+}) {
   const [hov, setHov] = useState(false)
+
   return (
     <div
-      style={{ position: 'relative', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem' }}
+      style={{
+        position: 'relative',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        gap: '0.5rem',
+      }}
       onMouseEnter={() => setHov(true)}
       onMouseLeave={() => setHov(false)}
     >
       {/* Tooltip */}
-      <div style={{
-        position: 'absolute', bottom: '100%', left: '50%',
-        transform: `translateX(-50%) translateY(${hov ? '-6px' : '0px'})`,
-        background: '#1a1a1a', border: `1px solid ${C.border}`,
-        borderRadius: 6, padding: '0.3rem 0.65rem',
-        fontFamily: C.font, fontSize: '0.7rem', fontWeight: 600,
-        color: C.ink, whiteSpace: 'nowrap', marginBottom: '0.4rem',
-        opacity: hov ? 1 : 0,
-        transition: 'opacity 0.2s, transform 0.2s',
-        pointerEvents: 'none',
-      }}>
+      <div
+        style={{
+          position: 'absolute',
+          bottom: '100%',
+          left: '50%',
+          transform: `translateX(-50%) translateY(${hov ? '-6px' : '0px'})`,
+          background: '#1a1a1a',
+          border: `1px solid ${C.border}`,
+          borderRadius: 6,
+          padding: '0.3rem 0.65rem',
+          fontFamily: C.font,
+          fontSize: '0.7rem',
+          fontWeight: 600,
+          color: C.ink,
+          whiteSpace: 'nowrap',
+          marginBottom: '0.4rem',
+          opacity: hov ? 1 : 0,
+          transition: 'opacity 0.2s, transform 0.2s',
+          pointerEvents: 'none',
+          zIndex: 10,
+        }}
+      >
         {name}
-        <div style={{ position: 'absolute', top: '100%', left: '50%', transform: 'translateX(-50%)', width: 0, height: 0, borderLeft: '4px solid transparent', borderRight: '4px solid transparent', borderTop: `4px solid ${C.border}` }} />
+
+        <div
+          style={{
+            position: 'absolute',
+            top: '100%',
+            left: '50%',
+            transform: 'translateX(-50%)',
+            width: 0,
+            height: 0,
+            borderLeft: '4px solid transparent',
+            borderRight: '4px solid transparent',
+            borderTop: `4px solid ${C.border}`,
+          }}
+        />
       </div>
 
-      {/* Chip */}
-      <div style={{
-        width: 56, height: 56, borderRadius: 14,
-        background: hov ? `rgba(${hexToRgb(accent)}, 0.1)` : 'rgba(238,236,232,0.04)',
-        border: `1px solid ${hov ? accent : C.border}`,
-        display: 'flex', alignItems: 'center', justifyContent: 'center',
-        transition: 'background 0.2s, border-color 0.2s',
-        cursor: 'default',
-      }}>
-        <span style={{
-          fontFamily: C.font, fontSize: '0.75rem', fontWeight: 800,
-          letterSpacing: '0.02em',
-          color: hov ? accent : C.muted,
-          transition: 'color 0.2s',
-        }}>{abbr}</span>
+      {/* Logo box */}
+      <div
+        style={{
+          width: 56,
+          height: 56,
+          borderRadius: 14,
+          background: hov
+            ? `rgba(${hexToRgb(accent)}, 0.1)`
+            : 'rgba(238,236,232,0.04)',
+          border: `1px solid ${hov ? accent : C.border}`,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          transition: 'background 0.2s, border-color 0.2s',
+          cursor: 'default',
+        }}
+      >
+        <img
+          src={src}
+          alt={name}
+          style={{
+            width: 30,
+            height: 30,
+            objectFit: 'contain',
+            opacity: hov ? 1 : 0.75,
+            transition: 'opacity 0.2s, transform 0.2s',
+            transform: hov ? 'scale(1.08)' : 'scale(1)',
+          }}
+        />
       </div>
     </div>
   )
@@ -875,16 +1151,18 @@ const EXPERIENCES = [
 ]
 
 const TOOLS = [
-  { name: 'Figma',      abbr: 'Fi', accent: '#F24E1E' },
-  { name: 'Midjourney', abbr: 'MJ', accent: '#4A6CF7' },
-  { name: 'Khroma',     abbr: 'Kh', accent: '#A855F7' },
-  { name: 'Visily',     abbr: 'Vi', accent: '#3B82F6' },
-  { name: 'Claude',     abbr: 'Cl', accent: '#D97706' },
-  { name: 'Notion AI',  abbr: 'No', accent: '#E2E8F0' },
-  { name: 'Dovetail',   abbr: 'Dv', accent: '#F43F5E' },
-  { name: 'Loom AI',    abbr: 'Lo', accent: '#625DF5' },
-  { name: 'Framer',     abbr: 'Fr', accent: '#0055FF' },
-  { name: 'Miro AI',    abbr: 'Mi', accent: '#FFD02F' },
+  { name: 'Figma',      src: figmaLogo,      accent: '#F24E1E' },
+  { name: 'Midjourney', src: midjourneyLogo, accent: '#4A6CF7' },
+  { name: 'Khroma',     src: khromaLogo,     accent: '#A855F7' },
+  { name: 'Visily',     src: visilyLogo,     accent: '#3B82F6' },
+  { name: 'Claude',     src: claudeLogo,     accent: '#D97706' },
+  { name: 'Notion AI',  src: notionLogo,     accent: '#E2E8F0' },
+  { name: 'Dovetail',   src: dovetailLogo,   accent: '#F43F5E' },
+  { name: 'Loom AI',    src: loomLogo,       accent: '#625DF5' },
+  { name: 'Framer',     src: framerLogo,     accent: '#0055FF' },
+  { name: 'Miro AI',    src: miroLogo,       accent: '#FFD02F' },
+  { name: 'Group AI',    src: groupLogo,       accent: '#FFD02F' },
+  { name: 'Tello AI',    src: TelloLogo,       accent: '#FFD02F' },
 ]
 
 const SKILLS_ABOUT = [
@@ -1016,8 +1294,13 @@ function AboutPage({ setPage }: { setPage: (p: Page) => void }) {
               <p style={{ fontFamily: C.font, fontSize: '0.83rem', color: C.muted, margin: '0 0 2rem' }}>Hover to see the tool name.</p>
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.85rem' }}>
                 {TOOLS.map(t => (
-                  <ToolChip key={t.name} name={t.name} abbr={t.abbr} accent={t.accent} />
-                ))}
+  <ToolChip
+    key={t.name}
+    name={t.name}
+    src={t.src}
+    accent={t.accent}
+  />
+))}
               </div>
             </div>
 
