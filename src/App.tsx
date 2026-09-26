@@ -43,7 +43,7 @@ import phqMobileHome from './imports/Mobile_-_Home.png'
 import phqDeviceMockup from './imports/Pros_HQ_Landing_Page_-_Device___Mobile.png'
 import phqVideoDesktop from './imports/New_ProsHQ.mp4'
 import phqVideoMobile from './imports/Mobile_ProsHQ.mp4'
-import proDashboard      from './imports/Professional_-_Dashboard_Overview.png'
+import proDashboard      from './imports/Professional_-_Dashboard_Overview.svg'
 import proAvailTasks     from './imports/Professional_-_Available_Tasks.png'
 import proActiveTask     from './imports/Professional_-_Active_Task.svg'
 import proEarnings       from './imports/Professional_-_Earnings.png'
@@ -626,6 +626,7 @@ function WorkCards({ onViewAll, onMyQura, onProsHQ, onSurebase }: { onViewAll: (
             onClick={p.name === 'MyQura' ? onMyQura : p.name === 'ProsHQ' ? onProsHQ : p.name === 'Surebase' ? onSurebase : undefined}
             style={{
               background: p.bg,
+              padding: '0 0 1.3rem',
               marginTop: i === 1 ? '-3rem' : 0,
               cursor: (p.name === 'MyQura' || p.name === 'ProsHQ' || p.name === 'Surebase') ? 'pointer' : 'default',
             }}
@@ -749,7 +750,7 @@ function AboutTeaser({ onAbout }: { onAbout: () => void }) {
             style={{
               position: 'absolute', bottom: 0, left: '50%',
               transform: 'translateX(-50%)',
-              width: '105%', height: '108%',
+              width: '105%', height: '97%',
               objectFit: 'cover', objectPosition: 'center top',
               mixBlendMode: 'screen',
               opacity: hov ? 0 : 1,
@@ -1161,8 +1162,8 @@ const TOOLS = [
   { name: 'Loom AI',    src: loomLogo,       accent: '#625DF5' },
   { name: 'Framer',     src: framerLogo,     accent: '#0055FF' },
   { name: 'Miro AI',    src: miroLogo,       accent: '#FFD02F' },
-  { name: 'Group AI',    src: groupLogo,       accent: '#FFD02F' },
-  { name: 'Tello AI',    src: TelloLogo,       accent: '#FFD02F' },
+  { name: 'Survey Monkey',    src: groupLogo,       accent: '#FFD02F' },
+  { name: 'Trello',    src: TelloLogo,       accent: '#FFD02F' },
 ]
 
 const SKILLS_ABOUT = [
@@ -1988,33 +1989,106 @@ function ProsHQPage({ setPage }: { setPage: (p: Page) => void }) {
           marginBottom: '4rem',
         }}>
           {/* Screenshots — 2×2 grid */}
-          <div className="phq-flow-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '1rem' }}>
-            {[
-              { n: '01', label: 'Client Dashboard',         src: phqClientDashboard,  alt: 'Client dashboard showing active tasks, completed count, available balance and client rating' },
-              { n: '02', label: 'Applicants Page',          src: phqClientApplicants, alt: 'Applicants page showing verified professionals with ratings, quotes, and assign buttons' },
-              { n: '03', label: 'Task Posted Successfully', src: phqClientTaskPosted, alt: 'Task posted successfully confirmation screen' },
-              { n: '04', label: 'Rate a Professional',      src: phqClientRate,       alt: 'Client rating a professional after task completion' },
-            ].map((img, i) => (
-              <div key={i}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.45rem', marginBottom: '0.6rem' }}>
-                  <span style={{
-                    display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
-                    width: 18, height: 18, borderRadius: '50%', flexShrink: 0,
-                    background: C.gold, fontFamily: C.font,
-                    fontSize: '0.52rem', fontWeight: 800, color: C.bg,
-                  }}>{img.n}</span>
-                  <span style={{ fontFamily: C.font, fontSize: '0.68rem', fontWeight: 600, letterSpacing: '0.1em', textTransform: 'uppercase', color: C.muted }}>{img.label}</span>
-                </div>
-                <div style={{
-                  borderRadius: 10, overflow: 'hidden',
-                  border: `1px solid ${C.border}`,
-                  background: '#0d0d0d',
-                }}>
-                  <img src={img.src} alt={img.alt} style={{ width: '100%', height: 'auto', display: 'block' }} />
-                </div>
-              </div>
-            ))}
-          </div>
+<div
+  className="phq-flow-grid"
+  style={{
+    display: 'grid',
+    gridTemplateColumns: 'repeat(2, 1fr)',
+    gap: '1rem',
+  }}
+>
+  {[
+    {
+      n: '01',
+      label: 'Client Dashboard',
+      src: phqClientDashboard,
+      alt: 'Client dashboard showing active tasks, completed count, available balance and client rating',
+    },
+    {
+      n: '02',
+      label: 'Applicants Page',
+      src: phqClientApplicants,
+      alt: 'Applicants page showing verified professionals with ratings, quotes, and assign buttons',
+    },
+    {
+      n: '03',
+      label: 'Task Posted Successfully',
+      src: phqClientTaskPosted,
+      alt: 'Task posted successfully confirmation screen',
+    },
+    {
+      n: '04',
+      label: 'Rate a Professional',
+      src: phqClientRate,
+      alt: 'Client rating a professional after task completion',
+    },
+  ].map((img, i) => (
+    <div key={i}>
+      {/* Hide the heading for Client Dashboard because the image already has it */}
+      {img.n !== '01' && (
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '0.45rem',
+            marginBottom: '0.6rem',
+          }}
+        >
+          <span
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              width: 18,
+              height: 18,
+              borderRadius: '50%',
+              flexShrink: 0,
+              background: C.gold,
+              fontFamily: C.font,
+              fontSize: '0.52rem',
+              fontWeight: 800,
+              color: C.bg,
+            }}
+          >
+            {img.n}
+          </span>
+
+          <span
+            style={{
+              fontFamily: C.font,
+              fontSize: '0.68rem',
+              fontWeight: 600,
+              letterSpacing: '0.1em',
+              textTransform: 'uppercase',
+              color: C.muted,
+            }}
+          >
+            {img.label}
+          </span>
+        </div>
+      )}
+
+      <div
+        style={{
+          borderRadius: 10,
+          overflow: 'hidden',
+          border: `1px solid ${C.border}`,
+          background: '#0d0d0d',
+        }}
+      >
+        <img
+          src={img.src}
+          alt={img.alt}
+          style={{
+            width: '100%',
+            height: 'auto',
+            display: 'block',
+          }}
+        />
+      </div>
+    </div>
+  ))}
+</div>
         </div>
 
         {/* Design callouts */}
