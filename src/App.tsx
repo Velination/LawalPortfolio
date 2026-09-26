@@ -247,7 +247,9 @@ function ContactModal({ onClose }: { onClose: () => void }) {
   })
 
   const [sent, setSent] = useState(false)
-  const [focused, setFocused] = useState<keyof ContactForm | null>(null)
+const [sending, setSending] = useState(false)
+const [error, setError] = useState('')
+const [focused, setFocused] = useState<keyof ContactForm | null>(null)
 
   const set = (key: keyof ContactForm) => (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -258,23 +260,40 @@ function ContactModal({ onClose }: { onClose: () => void }) {
     }))
   }
 
-  const handleSubmit = (e: FormEvent) => {
-    e.preventDefault()
+  const handleSubmit = async (e: FormEvent) => {
+  e.preventDefault()
 
-    const body = `Hi Lawal,
+  setSending(true)
+  setError('')
 
-Name: ${form.name}
-Email: ${form.email}
+  try {
+    const response = await fetch('https://formspree.io/f/xaenpkwz', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+      },
+      body: JSON.stringify({
+        name: form.name,
+        email: form.email,
+        subject: form.subject || 'Portfolio Enquiry',
+        message: form.message,
+      }),
+    })
 
-${form.message}`
-
-    window.location.href =
-      `mailto:lajimohofficial@gmail.com?subject=${encodeURIComponent(
-        form.subject || 'Portfolio Enquiry'
-      )}&body=${encodeURIComponent(body)}`
+    if (!response.ok) {
+      throw new Error('Failed to send your message.')
+    }
 
     setSent(true)
+  } catch (err) {
+    setError(
+      'Your message could not be sent. Please try again or email me directly.'
+    )
+  } finally {
+    setSending(false)
   }
+}
 
   useEffect(() => {
     const fn = (e: KeyboardEvent) => {
@@ -429,17 +448,35 @@ ${form.message}`
               />
 
               <button
-                type="submit"
-                className="pill pill-gold"
-                style={{
-                  width: '100%',
-                  justifyContent: 'center',
-                  marginTop: '0.5rem',
-                  padding: '1rem',
-                }}
-              >
-                Send message →
-              </button>
+  type="submit"
+  className="pill pill-gold"
+  disabled={sending}
+  style={{
+    width: '100%',
+    justifyContent: 'center',
+    marginTop: '0.5rem',
+    padding: '1rem',
+    opacity: sending ? 0.6 : 1,
+    cursor: sending ? 'not-allowed' : 'pointer',
+  }}
+>
+  {sending ? 'Sending...' : 'Send message →'}
+</button>
+
+{error && (
+  <p
+    role="alert"
+    style={{
+      color: '#f87171',
+      fontFamily: C.font,
+      fontSize: '0.85rem',
+      marginTop: '1rem',
+      textAlign: 'center',
+    }}
+  >
+    {error}
+  </p>
+)}
             </form>
           </>
         ) : (
@@ -465,17 +502,17 @@ ${form.message}`
               Message sent!
             </h3>
 
-            <p
-              style={{
-                fontFamily: C.font,
-                fontSize: '0.95rem',
-                color: C.muted,
-                marginBottom: '2rem',
-              }}
-            >
-              Your email client should have opened. If not, reach out at
-              lajimohofficial@gmail.com
-            </p>
+           <p
+  style={{
+    fontFamily: C.font,
+    fontSize: '0.95rem',
+    color: C.muted,
+    marginBottom: '2rem',
+  }}
+>
+  Thank you for reaching out! Your message has been sent successfully.
+  I’ll get back to you as soon as possible.
+</p>
 
             <button
               className="pill pill-ghost"
@@ -2263,14 +2300,27 @@ function MyQuraSlider() {
       }}
       onTouchStart={e => { touchX.current = e.touches[0].clientX }}
       onTouchEnd={e => handleSwipeEnd(e.changedTouches[0].clientX)}
-      onMouseDown={e => { dragging.current = true; dragX.current = e.clientX }}
-      onMouseMove={e => { if (!dragging.current) return }}
-      onMouseUp={e => {
-        if (!dragging.current) return
-        dragging.current = false
-        handleSwipeEnd(e.clientX)
-      }}
-      onMouseLeave={() => { dragging.current = false }}
+      onMouseDown={e => {
+  dragging.current = true;
+  dragX.current = e.clientX;
+}}
+onMouseMove={() => {
+  if (!dragging.current) return;
+}}
+onMouseUp={e => {
+  if (!dragging.current) return;
+
+  dragging.current = false;
+
+  const diff = dragX.current - e.clientX;
+
+  if (Math.abs(diff) > 40) {
+    diff > 0 ? next() : prev();
+  }
+}}
+onMouseLeave={() => {
+  dragging.current = false;
+}}
     >
       {/* Slide track */}
       <div style={{ position: 'relative', height: containerH, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -2791,7 +2841,7 @@ function MyQuraPage({ setPage }: { setPage: (p: Page) => void }) {
           <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: '30%', background: `linear-gradient(to top, ${C.bg}, transparent)`, pointerEvents: 'none' }} />
         </div>
 
-        <div className="admin-stats-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '0', marginTop: '3rem', border: `1px solid ${C.border}`, borderRadius: 10, overflow: 'hidden' }}>
+        {/* <div className="admin-stats-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '0', marginTop: '3rem', border: `1px solid ${C.border}`, borderRadius: 10, overflow: 'hidden' }}>
           {[
             { n: '126', l: 'Caregivers managed' },
             { n: '592', l: 'Active clients' },
@@ -2807,7 +2857,7 @@ function MyQuraPage({ setPage }: { setPage: (p: Page) => void }) {
               <div style={{ fontFamily: C.font, fontSize: '0.75rem', color: C.dim }}>{s.l}</div>
             </div>
           ))}
-        </div>
+        </div> */}
       </section>
 
       {/* ── Retrospect ── */}
@@ -3091,11 +3141,7 @@ function SurebasePage({ setPage }: { setPage: (p: Page) => void }) {
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '4rem', alignItems: 'center' }} className="about-3col">
           {/* Left — text */}
           <div>
-            <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', marginBottom: '2rem' }}>
-              {['B2B Platform', 'Insurance Infrastructure', 'Web Platform', '2024'].map(t => (
-                <span key={t} style={{ fontFamily: C.font, fontSize: '0.68rem', fontWeight: 600, letterSpacing: '0.08em', textTransform: 'uppercase', color: C.muted, background: C.panel, border: `1px solid ${C.border}`, padding: '0.28rem 0.65rem', borderRadius: 100 }}>{t}</span>
-              ))}
-            </div>
+           
 
             <h1 style={{ fontFamily: C.font, fontWeight: 800, fontSize: 'clamp(3.5rem, 7vw, 6.5rem)', lineHeight: 1, letterSpacing: '-0.04em', color: C.ink, margin: '0 0 1.5rem' }}>
               Sure<em style={{ fontStyle: 'italic', color: C.gold }}>base.</em>
@@ -3104,6 +3150,12 @@ function SurebasePage({ setPage }: { setPage: (p: Page) => void }) {
             <p style={{ fontFamily: C.font, fontSize: '1rem', fontWeight: 400, lineHeight: 1.8, color: C.muted, maxWidth: '44ch', margin: '0 0 3rem' }}>
               A B2B insurance infrastructure platform connecting insurers, brokers, and corporate organisations through a single, unified system.
             </p>
+
+             <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', marginBottom: '2rem' }}>
+              {['B2B Platform', 'Insurance Infrastructure', 'Web Platform', '2024'].map(t => (
+                <span key={t} style={{ fontFamily: C.font, fontSize: '0.68rem', fontWeight: 600, letterSpacing: '0.08em', textTransform: 'uppercase', color: C.muted, background: C.panel, border: `1px solid ${C.border}`, padding: '0.28rem 0.65rem', borderRadius: 100 }}>{t}</span>
+              ))}
+            </div>
 
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '0', border: `1px solid ${C.border}`, borderRadius: 12, overflow: 'hidden' }}>
               {[
