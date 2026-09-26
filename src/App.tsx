@@ -502,7 +502,7 @@ function Nav({ page, setPage, onContact }: { page: Page; setPage: (p: Page) => v
   }, [])
 
   return (
-    <nav style={{
+    <nav className="site-nav" style={{
       position: 'fixed', top: 0, left: 0, right: 0, zIndex: 100,
       height: 68, display: 'flex', alignItems: 'center',
       justifyContent: 'space-between', padding: '0 2.5rem',
@@ -512,15 +512,16 @@ function Nav({ page, setPage, onContact }: { page: Page; setPage: (p: Page) => v
       transition: 'background 0.3s',
     }}>
       <button onClick={() => setPage('home')} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0, lineHeight: 0 }}>
-        <img src={logoSVG} alt="LA" style={{ height: 38 }} />
+        <img className="nav-logo-img" src={logoSVG} alt="LA" style={{ height: 38 }} />
       </button>
 
-      <div style={{ display: 'flex', alignItems: 'center', gap: '1.75rem' }}>
+      <div className="nav-links" style={{ display: 'flex', alignItems: 'center', gap: '1.75rem' }}>
         {(['home', 'about', 'projects'] as const).map(p => (
           <NavBtn key={p} label={p} active={page === p || (p === 'projects' && (page === 'myqura' || page === 'proshq' || page === 'surebase'))} onClick={() => setPage(p)} />
         ))}
 
         <button
+          className="nav-pill"
           onClick={onContact}
           style={{
             display: 'flex', alignItems: 'center', gap: '0.5rem',
@@ -531,9 +532,9 @@ function Nav({ page, setPage, onContact }: { page: Page; setPage: (p: Page) => v
           onMouseEnter={e => (e.currentTarget.style.borderColor = 'rgba(232,184,75,0.35)')}
           onMouseLeave={e => (e.currentTarget.style.borderColor = C.border)}
         >
-          <img src={photo3} alt="" style={{ width: 28, height: 28, borderRadius: '50%', objectFit: 'cover', objectPosition: 'center top' }} />
-          <span style={{ fontFamily: C.font, fontSize: '0.75rem', fontWeight: 500, color: C.muted }}>
-            <span style={{ color: '#4ade80', marginRight: '0.3rem', fontSize: '0.55rem' }}>●</span>
+          <img className="nav-pill-avatar" src={photo3} alt="" style={{ width: 28, height: 28, borderRadius: '50%', objectFit: 'cover', objectPosition: 'center top' }} />
+          <span className="nav-pill-label" style={{ fontFamily: C.font, fontSize: '0.75rem', fontWeight: 500, color: C.muted }}>
+            <span className="nav-pill-dot" style={{ color: '#4ade80', marginRight: '0.3rem', fontSize: '0.55rem' }}>●</span>
             Available
           </span>
         </button>
@@ -1006,10 +1007,12 @@ function ToolChip({
   name,
   src,
   accent,
+  abbr,
 }: {
   name: string
   src: string
   accent: string
+  abbr?: string
 }) {
   const [hov, setHov] = useState(false)
 
@@ -1027,6 +1030,7 @@ function ToolChip({
     >
       {/* Tooltip */}
       <div
+        className="tool-chip-tooltip"
         style={{
           position: 'absolute',
           bottom: '100%',
@@ -1067,7 +1071,9 @@ function ToolChip({
 
       {/* Logo box */}
       <div
+        className={`tool-chip-box${hov ? ' is-hovered' : ''}`}
         style={{
+          position: 'relative',
           width: 56,
           height: 56,
           borderRadius: 14,
@@ -1083,6 +1089,7 @@ function ToolChip({
         }}
       >
         <img
+          className="tool-chip-img"
           src={src}
           alt={name}
           style={{
@@ -1094,6 +1101,26 @@ function ToolChip({
             transform: hov ? 'scale(1.08)' : 'scale(1)',
           }}
         />
+        {abbr && (
+          <span
+            className="tool-chip-abbr"
+            style={{
+              display: 'none',
+              position: 'absolute',
+              inset: 0,
+              alignItems: 'center',
+              justifyContent: 'center',
+              fontFamily: C.font,
+              fontSize: 12,
+              fontWeight: 800,
+              letterSpacing: '0.24px',
+              color: C.muted,
+              transition: 'opacity 0.2s',
+            }}
+          >
+            {abbr}
+          </span>
+        )}
       </div>
     </div>
   )
@@ -1151,18 +1178,18 @@ const EXPERIENCES = [
 ]
 
 const TOOLS = [
-  { name: 'Figma',      src: figmaLogo,      accent: '#F24E1E' },
-  { name: 'Midjourney', src: midjourneyLogo, accent: '#4A6CF7' },
-  { name: 'Khroma',     src: khromaLogo,     accent: '#A855F7' },
-  { name: 'Visily',     src: visilyLogo,     accent: '#3B82F6' },
-  { name: 'Claude',     src: claudeLogo,     accent: '#D97706' },
-  { name: 'Notion AI',  src: notionLogo,     accent: '#E2E8F0' },
-  { name: 'Dovetail',   src: dovetailLogo,   accent: '#F43F5E' },
-  { name: 'Loom AI',    src: loomLogo,       accent: '#625DF5' },
-  { name: 'Framer',     src: framerLogo,     accent: '#0055FF' },
-  { name: 'Miro AI',    src: miroLogo,       accent: '#FFD02F' },
-  { name: 'Group AI',    src: groupLogo,       accent: '#FFD02F' },
-  { name: 'Tello AI',    src: TelloLogo,       accent: '#FFD02F' },
+  { name: 'Figma',      src: figmaLogo,      accent: '#F24E1E', abbr: 'Fi' },
+  { name: 'Midjourney', src: midjourneyLogo, accent: '#4A6CF7', abbr: 'MJ' },
+  { name: 'Khroma',     src: khromaLogo,     accent: '#A855F7', abbr: 'Kh' },
+  { name: 'Visily',     src: visilyLogo,     accent: '#3B82F6', abbr: 'Vi' },
+  { name: 'Claude',     src: claudeLogo,     accent: '#D97706', abbr: 'Cl' },
+  { name: 'Notion AI',  src: notionLogo,     accent: '#E2E8F0', abbr: 'No' },
+  { name: 'Dovetail',   src: dovetailLogo,   accent: '#F43F5E', abbr: 'Dv' },
+  { name: 'Loom AI',    src: loomLogo,       accent: '#625DF5', abbr: 'Lo' },
+  { name: 'Framer',     src: framerLogo,     accent: '#0055FF', abbr: 'Fr' },
+  { name: 'Miro AI',    src: miroLogo,       accent: '#FFD02F', abbr: 'Mi' },
+  { name: 'Group AI',    src: groupLogo,       accent: '#FFD02F', abbr: 'Gr' },
+  { name: 'Tello AI',    src: TelloLogo,       accent: '#FFD02F', abbr: 'Te' },
 ]
 
 const SKILLS_ABOUT = [
@@ -1299,6 +1326,7 @@ function AboutPage({ setPage }: { setPage: (p: Page) => void }) {
     name={t.name}
     src={t.src}
     accent={t.accent}
+    abbr={t.abbr}
   />
 ))}
               </div>
@@ -1329,7 +1357,7 @@ function AboutPage({ setPage }: { setPage: (p: Page) => void }) {
           <h2 style={{ fontFamily: C.font, fontSize: 'clamp(1.5rem, 2.5vw, 2rem)', fontWeight: 800, color: C.ink, margin: '0 0 3rem', letterSpacing: '-0.02em' }}>What I do best</h2>
           <div className="skills-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)' }}>
             {SKILLS_ABOUT.map((s, i) => (
-              <div key={i} style={{
+              <div key={i} className="skill-card" style={{
                 padding: '2rem 1.75rem',
                 borderRight: (i + 1) % 3 !== 0 ? `1px solid ${C.border}` : 'none',
                 borderBottom: i < 3 ? `1px solid ${C.border}` : 'none',
@@ -1490,7 +1518,7 @@ function DeviceMockupWithVideos({ desktopSrc, mobileSrc }: { desktopSrc: string;
   )
 
   return (
-    <div ref={wrapRef} style={{ position: 'relative', width: '100%', height: CANVAS_H * scale }}>
+    <div ref={wrapRef} style={{ position: 'relative', width: '100%', height: CANVAS_H * scale, overflow: 'hidden' }}>
       <div style={{ position: 'absolute', top: 0, left: 0, transformOrigin: 'top left', transform: `scale(${scale})` }}>
         <DeviceMockupImport />
         {slot(DESKTOP_SLOT, desktopRef, desktopSrc)}
@@ -2262,9 +2290,9 @@ function MyQuraSlider() {
 
 // ── MyQura Case Study ─────────────────────────────────────────────────────────
 
-function PhoneMockup({ src, alt, style }: { src: string; alt: string; style?: React.CSSProperties }) {
+function PhoneMockup({ src, alt, style, className }: { src: string; alt: string; style?: React.CSSProperties; className?: string }) {
   return (
-    <div style={{
+    <div className={className} style={{
       position: 'relative', display: 'inline-block',
       filter: 'drop-shadow(0 32px 64px rgba(0,0,0,0.7))',
       ...style,
@@ -2489,7 +2517,7 @@ function MyQuraPage({ setPage }: { setPage: (p: Page) => void }) {
         <p style={{ fontFamily: C.font, fontSize: '0.9rem', color: C.muted, margin: '0 0 3.5rem', maxWidth: '52ch', lineHeight: 1.75 }}>
           To achieve both business and design goals, I mapped the full human story before touching a single screen.
         </p>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '0' }}>
+        <div className="skills-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '0' }}>
           {[
             { n: '01', t: 'The need arises', d: 'Oluwatobi is living in Canada with her family. Her dad has been sick and is discharged from hospital, needing ongoing care.' },
             { n: '02', t: 'Discovery', d: "In search of a healthcare service provider, Oluwatobi's friend introduces her to MyQura." },
@@ -2498,7 +2526,7 @@ function MyQuraPage({ setPage }: { setPage: (p: Page) => void }) {
             { n: '05', t: 'Care delivery', d: 'Care professionals attend to the patient for the stipulated number of days or months, with full schedule transparency.' },
             { n: '06', t: 'Outcome', d: 'Oluwatobi is happy her dad is well taken care of from abroad. The care professional is excited to offer her skills — and it shows.' },
           ].map((step, i) => (
-            <div key={i} style={{
+            <div key={i} className="skill-card" style={{
               padding: '2rem 1.75rem',
               borderRight: (i + 1) % 3 !== 0 ? `1px solid ${C.border}` : 'none',
               borderBottom: i < 3 ? `1px solid ${C.border}` : 'none',
@@ -2639,7 +2667,7 @@ function MyQuraPage({ setPage }: { setPage: (p: Page) => void }) {
             {/* Professional screens */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', alignItems: 'center' }}>
               <PhoneMockup src={mqPro3} alt="Care professional onboarding: Find your perfect care job" style={{ width: '85%' }} />
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', width: '100%' }}>
+              <div className="mockup-pair-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', width: '100%' }}>
                 <PhoneMockup src={mqPro1} alt="Care professional home screen with bookings dashboard" />
                 <PhoneMockup src={mqPro2} alt="Care professional bookings screen with Best Match tab" />
               </div>
@@ -2689,14 +2717,14 @@ function MyQuraPage({ setPage }: { setPage: (p: Page) => void }) {
           <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: '30%', background: `linear-gradient(to top, ${C.bg}, transparent)`, pointerEvents: 'none' }} />
         </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '0', marginTop: '3rem', border: `1px solid ${C.border}`, borderRadius: 10, overflow: 'hidden' }}>
+        <div className="admin-stats-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '0', marginTop: '3rem', border: `1px solid ${C.border}`, borderRadius: 10, overflow: 'hidden' }}>
           {[
             { n: '126', l: 'Caregivers managed' },
             { n: '592', l: 'Active clients' },
             { n: '1,578', l: 'Total bookings' },
             { n: '126', l: 'Consultations' },
           ].map((s, i) => (
-            <div key={i} style={{
+            <div key={i} className="admin-stat" style={{
               padding: '1.75rem',
               borderRight: i < 3 ? `1px solid ${C.border}` : 'none',
               background: C.panel, textAlign: 'center',
@@ -2719,7 +2747,7 @@ function MyQuraPage({ setPage }: { setPage: (p: Page) => void }) {
             Three months of deep immersion in healthcare design left me with convictions that now shape every project I take on.
           </p>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '1.5rem' }}>
+          <div className="retro-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '1.5rem' }}>
             {[
               { n: '01', t: 'Designing for Social Impact', d: "A deep dive into the healthcare sector revealed the urgent need for user-centred solutions in Nigeria and surrounding regions. This project channelled my passion for designing for social impact — and made it personal." },
               { n: '02', t: 'Inclusive Interface Design', d: "Designing for a multi-generational audience required a nuanced approach to accessibility and usability. I gained valuable experience in creating inclusive interfaces that work for everyone — regardless of age or digital literacy." },
@@ -2916,7 +2944,7 @@ function SbWebSlider() {
         )}
 
         {/* Label overlay */}
-        <div style={{
+        <div className="sb-web-slide-label" style={{
           position: 'absolute', bottom: 0, left: 0, right: 0,
           background: 'linear-gradient(to top, rgba(10,10,10,0.85) 0%, transparent 100%)',
           padding: '2.5rem 1.5rem 1.25rem',
@@ -3142,13 +3170,13 @@ function SurebasePage({ setPage }: { setPage: (p: Page) => void }) {
             Rather than a generic homepage, the Surebase website routes each user group to a tailored landing page — with its own value proposition, feature set, testimonial, and CTA.
           </p>
           <SbWebSlider />
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '0', marginTop: '3.5rem' }}>
+          <div className="sb-feature-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '0', marginTop: '3.5rem' }}>
             {[
               { n: '01', t: 'Segmented entry points', d: 'A top navigation sub-tab routes visitors to the right landing page — Insurance Partners, Brokers, or Corporate Partners — each with its own headline and tone.' },
               { n: '02', t: 'Social proof by role', d: 'Testimonials are matched to the visitor\'s user type — an insurer reads from Leadway Assurance, a broker reads from Premier Insurance Brokers.' },
               { n: '03', t: 'Role-specific features', d: 'Feature grids are entirely different per page — insurers see Distribution Network; brokers see Commission Tracking; each reads as if designed exclusively for them.' },
             ].map((d, i) => (
-              <div key={i} style={{ padding: '2rem 1.75rem', borderRight: i < 2 ? `1px solid ${C.border}` : 'none', borderTop: `1px solid ${C.border}` }}>
+              <div key={i} className="sb-feature-card" style={{ padding: '2rem 1.75rem', borderRight: i < 2 ? `1px solid ${C.border}` : 'none', borderTop: `1px solid ${C.border}` }}>
                 <div style={{ fontFamily: C.font, fontSize: '0.65rem', fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: C.gold, marginBottom: '0.75rem' }}>{d.n}</div>
                 <h4 style={{ fontFamily: C.font, fontSize: '0.92rem', fontWeight: 700, color: C.ink, margin: '0 0 0.5rem' }}>{d.t}</h4>
                 <p style={{ fontFamily: C.font, fontSize: '0.82rem', lineHeight: 1.75, color: C.muted, margin: 0 }}>{d.d}</p>
@@ -3158,104 +3186,220 @@ function SurebasePage({ setPage }: { setPage: (p: Page) => void }) {
         </div>
       </section>
 
-      {/* ── Insurance Partner Dashboard ── */}
-      <section style={{ maxWidth: 1100, margin: '0 auto', padding: '5rem 2.5rem' }}>
-        <SectionLabel>The Design — Insurance Partner Dashboard</SectionLabel>
-        <h2 style={{ fontFamily: C.font, fontSize: 'clamp(1.5rem, 2.5vw, 2.2rem)', fontWeight: 800, color: C.ink, margin: '0 0 0.75rem', letterSpacing: '-0.02em' }}>
-          Command centre for insurers
-        </h2>
-        <p style={{ fontFamily: C.font, fontSize: '0.9rem', color: C.muted, margin: '0 0 3.5rem', maxWidth: '55ch', lineHeight: 1.75 }}>
-          Insurance partners need a real-time view of their entire operation — from active policies and pending claims to product performance and broker distribution. Every number that matters is above the fold.
-        </p>
+    {/* ── Insurance Partner Dashboard ── */}
+<section className="sb-insurance-dashboard">
+  <div className="sb-insurance-dashboard-container">
+    <SectionLabel>The Design — Insurance Partner Dashboard</SectionLabel>
 
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', marginBottom: '3.5rem' }}>
-          <SbScreen src={sbInsuranceDashboard} alt="Insurance Partner dashboard overview" label="Dashboard Overview — Revenue trend, claims overview, recent policies & claims" />
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }} className="about-3col">
-            <SbScreen src={sbInsuranceProducts} alt="Insurance Partner products catalogue" label="Products Catalogue — 18 products across Motor, Health, Travel, Life & Home" />
-            <SbScreen src={sbInsuranceDist} alt="Insurance Partner distribution network" label="Distribution Network — Active brokers, total sales, policies distributed" />
-          </div>
+    <h2 className="sb-section-heading">
+      Command centre for insurers
+    </h2>
+
+    <p className="sb-section-description">
+      Insurance partners need a real-time view of their business across
+      products, distribution, claims, and revenue. The dashboard brings those
+      signals together so teams can act without digging through multiple
+      systems.
+    </p>
+
+    <div className="sb-insurance-screens">
+      <SbScreen
+        src={sbInsuranceDashboard}
+        alt="Insurance Partner dashboard overview"
+        label="Dashboard Overview — Revenue trend, claims overview, products & distribution at a glance"
+      />
+
+      <div className="sb-insurance-secondary-screens">
+        <SbScreen
+          src={sbInsuranceProducts}
+          alt="Insurance Partner products catalogue"
+          label="Products Catalogue — 18 products across Motor, Health & Life"
+        />
+
+        <SbScreen
+          src={sbInsuranceDist}
+          alt="Insurance Partner distribution network"
+          label="Distribution Network — Active brokers, total sales & performance"
+        />
+      </div>
+    </div>
+
+    <div className="sb-insurance-features">
+      {[
+        {
+          n: '01',
+          t: 'At-a-glance KPIs',
+          d: 'A top navigation sub-tab routes visitors to the right dashboard context, while key business metrics are surfaced immediately so insurers can understand performance without drilling into individual reports.',
+        },
+        {
+          n: '02',
+          t: 'Product management',
+          d: "Insurers can manage their full product catalogue from one place, with product details, availability, pricing information, and the tools needed to keep products aligned with their current offering.",
+        },
+        {
+          n: '03',
+          t: 'Distribution visibility',
+          d: 'The distribution view gives insurers visibility into their broker network, sales activity, and overall performance across the channels bringing their products to customers.',
+        },
+        {
+          n: '04',
+          t: 'Granular role access',
+          d: 'Feature grids are entirely different per page — individual roles only see the information and actions relevant to their responsibilities, reducing noise while keeping sensitive business data protected.',
+        },
+        {
+          n: '05',
+          t: 'Claims workflow',
+          d: 'Claims activity is surfaced as part of the wider insurer dashboard, giving teams a clear view of claims progress and allowing them to manage the workflow without switching between disconnected systems.',
+        },
+        {
+          n: '06',
+          t: 'Revenue trend chart',
+          d: 'Revenue performance is visualised over time so insurers can quickly identify changes in business performance and understand how their portfolio is trending.',
+        },
+      ].map((d) => (
+        <div key={d.n} className="sb-insurance-feature">
+          <div className="sb-insurance-feature-number">{d.n}</div>
+
+          <h4>{d.t}</h4>
+
+          <p>{d.d}</p>
         </div>
+      ))}
+    </div>
+  </div>
+</section>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '0' }}>
-          {[
-            { n: '01', t: 'At-a-glance KPIs', d: '5 stat cards surface the critical numbers immediately: total products, active policies, pending claims, total premium, and net revenue — all with month-on-month deltas.' },
-            { n: '02', t: 'Product management', d: 'Insurers can create, configure, and publish products with premium ranges, coverage limits, and underwriting criteria. Status filters (Active / Pending / Inactive) keep the catalogue clean.' },
-            { n: '03', t: 'Distribution visibility', d: 'The Distribution Network tab shows every active broker — their agent code, products sold, total policies, premium volume, and commission earned. Full transparency in one view.' },
-            { n: '04', t: 'Granular role access', d: 'Five roles — Partner Admin, Underwriter, Claims Officer, Finance Officer, Compliance Officer — each with scoped permissions, so every team member sees only what they need.' },
-            { n: '05', t: 'Claims workflow', d: 'Claims officers manage submissions, assess documents, communicate decisions, and track settlement status — all within the platform, reducing back-and-forth across external channels.' },
-            { n: '06', t: 'Revenue trend chart', d: 'An 8-month revenue line chart and a grouped claims bar chart give the leadership team performance narrative without opening a spreadsheet.' },
-          ].map((d, i) => (
-            <div key={i} style={{ padding: '2rem 1.75rem', borderRight: (i + 1) % 3 !== 0 ? `1px solid ${C.border}` : 'none', borderBottom: i < 3 ? `1px solid ${C.border}` : 'none', borderTop: `1px solid ${C.border}` }}>
-              <div style={{ fontFamily: C.font, fontSize: '0.65rem', fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: C.gold, marginBottom: '0.75rem' }}>{d.n}</div>
-              <h4 style={{ fontFamily: C.font, fontSize: '0.92rem', fontWeight: 700, color: C.ink, margin: '0 0 0.5rem' }}>{d.t}</h4>
-              <p style={{ fontFamily: C.font, fontSize: '0.82rem', lineHeight: 1.75, color: C.muted, margin: 0 }}>{d.d}</p>
-            </div>
-          ))}
+{/* ── Broker Dashboard ── */}
+<section className="sb-broker-dashboard">
+  <div className="sb-broker-dashboard-container">
+    <SectionLabel>The Design — Broker Dashboard</SectionLabel>
+
+    <h2 className="sb-section-heading">
+      Every tool a broker needs, in one place
+    </h2>
+
+    <p className="sb-section-description">
+      Brokers generate revenue by selling policies quickly and accurately. The
+      dashboard is built for speed — surfacing quotes, policies, customer data,
+      and commissions without a single redundant click.
+    </p>
+
+    <div className="sb-broker-screens">
+      <SbScreen
+        src={sbBrokersDashboard}
+        alt="Broker dashboard overview"
+        label="Dashboard Overview — Quotes, policies, claims, customers & commission at a glance"
+      />
+
+      <div className="sb-broker-secondary-screens">
+        <SbScreen
+          src={sbBrokersCustomers}
+          alt="Broker customers page"
+          label="Customers — Full book of business with active policies, total spend & status"
+        />
+
+        <SbScreen
+          src={sbBrokersWallet}
+          alt="Broker wallet and earnings"
+          label="Wallet — Available balance, pending commissions & full transaction history"
+        />
+      </div>
+    </div>
+
+    <div className="sb-broker-features">
+      {[
+        {
+          n: '01',
+          t: 'Quotes in seconds',
+          d: 'Brokers generate quotes across multiple insurers simultaneously from the dashboard. Quote history is tracked with customer, product, premium, status, and date — all in one table.',
+        },
+        {
+          n: '02',
+          t: 'Customer management',
+          d: "A complete customer database with contact details, active policy count, total spend, and registration date. Search, filter by status, and generate quotes directly from a customer's record.",
+        },
+        {
+          n: '03',
+          t: 'Commission wallet',
+          d: 'Available, pending, and total commission earnings are visible at a glance. A wallet summary bar breaks down the split between available, pending, and withdrawn funds.',
+        },
+        {
+          n: '04',
+          t: 'Three performance charts',
+          d: 'Quotes Generated, Policies Issued, and Commission Trend are charted independently — giving the broker a clear performance narrative across the same time period.',
+        },
+        {
+          n: '05',
+          t: 'API Keys access',
+          d: 'Brokers can self-manage their API credentials from within the portal — enabling technical teams to integrate without contacting support.',
+        },
+        {
+          n: '06',
+          t: 'Claims submission',
+          d: 'Brokers submit and track claims on behalf of customers — uploading supporting documents, communicating claim status, and monitoring resolution — all without leaving the platform.',
+        },
+      ].map((d) => (
+        <div key={d.n} className="sb-broker-feature">
+          <div className="sb-feature-number">{d.n}</div>
+
+          <h4>{d.t}</h4>
+
+          <p>{d.d}</p>
         </div>
-      </section>
+      ))}
+    </div>
+  </div>
+</section>
 
-      {/* ── Broker Dashboard ── */}
-      <section style={{ background: 'rgba(238,236,232,0.02)', borderTop: `1px solid ${C.border}`, borderBottom: `1px solid ${C.border}` }}>
-        <div style={{ maxWidth: 1100, margin: '0 auto', padding: '5rem 2.5rem' }}>
-          <SectionLabel>The Design — Broker Dashboard</SectionLabel>
-          <h2 style={{ fontFamily: C.font, fontSize: 'clamp(1.5rem, 2.5vw, 2.2rem)', fontWeight: 800, color: C.ink, margin: '0 0 0.75rem', letterSpacing: '-0.02em' }}>
-            Every tool a broker needs, in one place
-          </h2>
-          <p style={{ fontFamily: C.font, fontSize: '0.9rem', color: C.muted, margin: '0 0 3.5rem', maxWidth: '55ch', lineHeight: 1.75 }}>
-            Brokers generate revenue by selling policies quickly and accurately. The dashboard is built for speed — surfacing quotes, policies, customer data, and commissions without a single redundant click.
-          </p>
+{/* ── Design System & API Design ── */}
+<section className="sb-design-decisions">
+  <div className="sb-design-decisions-container">
+    <SectionLabel>Design Decisions</SectionLabel>
 
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', marginBottom: '3.5rem' }}>
-            <SbScreen src={sbBrokersDashboard} alt="Broker dashboard overview" label="Dashboard Overview — Quotes, policies, claims, customers & commission at a glance" />
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }} className="about-3col">
-              <SbScreen src={sbBrokersCustomers} alt="Broker customers page" label="Customers — Full book of business with active policies, total spend & status" />
-              <SbScreen src={sbBrokersWallet} alt="Broker wallet and earnings" label="Wallet — Available balance, pending commissions & full transaction history" />
-            </div>
-          </div>
+    <h2 className="sb-section-heading">
+      Principles that held across five user groups
+    </h2>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '0' }}>
-            {[
-              { n: '01', t: 'Quotes in seconds', d: 'Brokers generate quotes across multiple insurers simultaneously from the dashboard. Quote history is tracked with customer, product, premium, status, and date — all in one table.' },
-              { n: '02', t: 'Customer management', d: 'A complete customer database with contact details, active policy count, total spend, and registration date. Search, filter by status, and generate quotes directly from a customer\'s record.' },
-              { n: '03', t: 'Commission wallet', d: 'Available, pending, and total commission earnings are visible at a glance. A wallet summary bar breaks down the split between available, pending, and withdrawn funds.' },
-              { n: '04', t: 'Three performance charts', d: 'Quotes Generated, Policies Issued, and Commission Trend are charted independently — giving the broker a clear performance narrative across the same time period.' },
-              { n: '05', t: 'API Keys access', d: 'Brokers can self-manage their API credentials from within the portal — enabling technical teams to integrate without contacting support.' },
-              { n: '06', t: 'Claims submission', d: 'Brokers submit and track claims on behalf of customers — uploading supporting documents, communicating claim status, and monitoring resolution — all without leaving the platform.' },
-            ].map((d, i) => (
-              <div key={i} style={{ padding: '2rem 1.75rem', borderRight: (i + 1) % 3 !== 0 ? `1px solid ${C.border}` : 'none', borderBottom: i < 3 ? `1px solid ${C.border}` : 'none', borderTop: `1px solid ${C.border}` }}>
-                <div style={{ fontFamily: C.font, fontSize: '0.65rem', fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: C.gold, marginBottom: '0.75rem' }}>{d.n}</div>
-                <h4 style={{ fontFamily: C.font, fontSize: '0.92rem', fontWeight: 700, color: C.ink, margin: '0 0 0.5rem' }}>{d.t}</h4>
-                <p style={{ fontFamily: C.font, fontSize: '0.82rem', lineHeight: 1.75, color: C.muted, margin: 0 }}>{d.d}</p>
-              </div>
-            ))}
-          </div>
+    <p className="sb-section-description">
+      Designing for multiple user groups under one brand required a strict
+      visual language — so users feel consistency even when the features
+      differ entirely.
+    </p>
+
+    <div className="sb-decision-cards">
+      {[
+        {
+          n: '01',
+          t: 'Shared design language, different contexts',
+          d: 'All dashboards share the same navigation pattern, stat card structure, table format, and status badge system — so onboarding from one portal to another is instant. The green sidebar accent changes per user group to provide orientation without redesigning the shell.',
+        },
+        {
+          n: '02',
+          t: 'Role-based access baked into the design',
+          d: "Every screen was designed with role constraints in mind. A Viewer never sees action buttons. A Claims Officer sees claims, not financials. The UI enforces permissions — not just the backend — so users are never left wondering what they can or can't do.",
+        },
+        {
+          n: '03',
+          t: 'Data density without cognitive overload',
+          d: 'Enterprise dashboards need density, but density without hierarchy creates noise. I used progressive disclosure — KPI cards at the top, charts in the middle, detailed tables below — so users can stop reading at the level of detail they need.',
+        },
+        {
+          n: '04',
+          t: 'Developer-first API documentation',
+          d: 'The Developer Portal was designed for both technical and non-technical users. Endpoint docs include request parameters, response structures, error codes, and sample code — with a sandbox environment and structured production approval workflow.',
+        },
+      ].map((d) => (
+        <div key={d.n} className="sb-decision-card">
+          <div className="sb-feature-number">{d.n}</div>
+
+          <h4>{d.t}</h4>
+
+          <p>{d.d}</p>
         </div>
-      </section>
-
-      {/* ── Design System & API Design ── */}
-      <section style={{ maxWidth: 1100, margin: '0 auto', padding: '5rem 2.5rem' }}>
-        <SectionLabel>Design Decisions</SectionLabel>
-        <h2 style={{ fontFamily: C.font, fontSize: 'clamp(1.5rem, 2.5vw, 2.2rem)', fontWeight: 800, color: C.ink, margin: '0 0 0.75rem', letterSpacing: '-0.02em' }}>
-          Principles that held across five user groups
-        </h2>
-        <p style={{ fontFamily: C.font, fontSize: '0.9rem', color: C.muted, margin: '0 0 3.5rem', maxWidth: '55ch', lineHeight: 1.75 }}>
-          Designing for multiple user groups under one brand required a strict visual language — so users feel consistency even when the features differ entirely.
-        </p>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '1.5rem' }} className="about-3col">
-          {[
-            { n: '01', t: 'Shared design language, different contexts', d: 'All dashboards share the same navigation pattern, stat card structure, table format, and status badge system — so onboarding from one portal to another is instant. The green sidebar accent changes per user group to provide orientation without redesigning the shell.' },
-            { n: '02', t: 'Role-based access baked into the design', d: 'Every screen was designed with role constraints in mind. A Viewer never sees action buttons. A Claims Officer sees claims, not financials. The UI enforces permissions — not just the backend — so users are never left wondering what they can or can\'t do.' },
-            { n: '03', t: 'Data density without cognitive overload', d: 'Enterprise dashboards need density, but density without hierarchy creates noise. I used progressive disclosure — KPI cards at the top, charts in the middle, detailed tables below — so users can stop reading at the level of detail they need.' },
-            { n: '04', t: 'Developer-first API documentation', d: 'The Developer Portal was designed for both technical and non-technical users. Endpoint docs include request parameters, response structures, error codes, and sample code — with a sandbox environment and structured production approval workflow.' },
-          ].map((d, i) => (
-            <div key={i} style={{ padding: '2.5rem', background: C.panel, border: `1px solid ${C.border}`, borderRadius: 12 }}>
-              <div style={{ fontFamily: C.font, fontSize: '0.65rem', fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: C.gold, marginBottom: '1rem' }}>{d.n}</div>
-              <h4 style={{ fontFamily: C.font, fontSize: '1rem', fontWeight: 700, color: C.ink, margin: '0 0 0.75rem', letterSpacing: '-0.01em' }}>{d.t}</h4>
-              <p style={{ fontFamily: C.font, fontSize: '0.85rem', lineHeight: 1.8, color: C.muted, margin: 0 }}>{d.d}</p>
-            </div>
-          ))}
-        </div>
-      </section>
+      ))}
+    </div>
+  </div>
+</section>
 
       {/* ── What I learned ── */}
       <section style={{ background: 'rgba(238,236,232,0.02)', borderTop: `1px solid ${C.border}`, borderBottom: `1px solid ${C.border}` }}>
