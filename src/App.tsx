@@ -1908,13 +1908,30 @@ function ProsHQPage({ setPage }: { setPage: (p: Page) => void }) {
       </section>
 
       {/* ── Target Users ── */}
-      <section style={{ maxWidth: 1100, margin: '0 auto', padding: '5rem 2.5rem' }}>
+      <section
+  style={{
+    maxWidth: 1100,
+    margin: '0 auto',
+    padding: 'clamp(3rem, 8vw, 5rem) clamp(1rem, 5vw, 2.5rem)',
+    boxSizing: 'border-box',
+    width: '100%',
+  }}
+>
         <SectionLabel>Target Users</SectionLabel>
         <h2 style={{ fontFamily: C.font, fontSize: 'clamp(1.5rem, 2.5vw, 2.2rem)', fontWeight: 800, color: C.ink, margin: '0 0 3rem', letterSpacing: '-0.02em' }}>
           Two sides of one marketplace
         </h2>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem' }} className="about-3col">
-          <div style={{ padding: '2.5rem', borderRadius: 12, background: C.panel, border: `1px solid ${C.border}`, borderTop: `2px solid ${C.gold}` }}>
+        <div
+  className="about-3col"
+  style={{
+    display: 'grid',
+    gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 420px), 1fr))',
+    gap: '1.5rem',
+    width: '100%',
+    boxSizing: 'border-box',
+  }}
+>
+          <div style={{ padding: 'clamp(1.25rem, 5vw, 3.5rem)', borderRadius: 12, background: C.panel, border: `1px solid ${C.border}`, borderTop: `2px solid ${C.gold}` }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1.5rem' }}>
               <div style={{ width: 48, height: 48, borderRadius: '50%', background: 'rgba(232,184,75,0.12)', border: `1px solid rgba(232,184,75,0.3)`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: C.font, fontSize: '1.1rem', fontWeight: 800, color: C.gold }}>C</div>
               <div>
@@ -1980,7 +1997,7 @@ function ProsHQPage({ setPage }: { setPage: (p: Page) => void }) {
           </p>
 
           {/* Device mockup with videos composited inside */}
-          <div style={{ marginBottom: '4rem' }}>
+          <div style={{ marginBottom: '4rem'}}>
             <DeviceMockupWithVideos desktopSrc={phqVideoDesktop} mobileSrc={phqVideoMobile} />
           </div>
 
