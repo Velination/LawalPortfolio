@@ -85,7 +85,7 @@ const C = {
   muted:  'rgba(238,236,232,0.5)',
   dim:    'rgba(238,236,232,0.32)',
   gold:   '#E8B84B',
-  border: 'rgba(238,236,232,0.07)',
+  border: 'rgba(238,236,232,0.12)',
   panel:  'rgba(238,236,232,0.03)',
   font:   "'Plus Jakarta Sans', sans-serif",
 } as const
@@ -1053,9 +1053,28 @@ function ToolChip({
   abbr?: string
 }) {
   const [hov, setHov] = useState(false)
+  const [inView, setInView] = useState(false)
+  const wrapRef = useRef<HTMLDivElement>(null)
+
+  // On mobile, reveal the real logo simply by being visible on screen —
+  // no tap required, since hover doesn't reliably fire on touch anyway.
+  useEffect(() => {
+    const el = wrapRef.current
+    if (!el) return
+    const obs = new IntersectionObserver(
+      ([entry]) => setInView(entry.isIntersecting),
+      { threshold: 0.6 }
+    )
+    obs.observe(el)
+    return () => obs.disconnect()
+  }, [])
+
+  const revealed = hov // tooltip + desktop tint: real hover only
+  const showLogo = hov || inView // mobile logo/abbr swap can also trigger just by scrolling into view
 
   return (
     <div
+      ref={wrapRef}
       style={{
         position: 'relative',
         display: 'flex',
@@ -1066,14 +1085,14 @@ function ToolChip({
       onMouseEnter={() => setHov(true)}
       onMouseLeave={() => setHov(false)}
     >
-      {/* Tooltip */}
+      {/* Tooltip — desktop hover only; hidden outright on mobile via CSS */}
       <div
         className="tool-chip-tooltip"
         style={{
           position: 'absolute',
           bottom: '100%',
           left: '50%',
-          transform: `translateX(-50%) translateY(${hov ? '-6px' : '0px'})`,
+          transform: `translateX(-50%) translateY(${revealed ? '-6px' : '0px'})`,
           background: '#1a1a1a',
           border: `1px solid ${C.border}`,
           borderRadius: 6,
@@ -1084,7 +1103,7 @@ function ToolChip({
           color: C.ink,
           whiteSpace: 'nowrap',
           marginBottom: '0.4rem',
-          opacity: hov ? 1 : 0,
+          opacity: revealed ? 1 : 0,
           transition: 'opacity 0.2s, transform 0.2s',
           pointerEvents: 'none',
           zIndex: 10,
@@ -1109,16 +1128,16 @@ function ToolChip({
 
       {/* Logo box */}
       <div
-        className={`tool-chip-box${hov ? ' is-hovered' : ''}`}
+        className={`tool-chip-box${showLogo ? ' is-hovered' : ''}`}
         style={{
           position: 'relative',
           width: 56,
           height: 56,
           borderRadius: 14,
-          background: hov
+          background: revealed
             ? `rgba(${hexToRgb(accent)}, 0.1)`
             : 'rgba(238,236,232,0.04)',
-          border: `1px solid ${hov ? accent : C.border}`,
+          border: `1px solid ${revealed ? accent : C.border}`,
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
@@ -1134,9 +1153,9 @@ function ToolChip({
             width: 30,
             height: 30,
             objectFit: 'contain',
-            opacity: hov ? 1 : 0.75,
+            opacity: revealed ? 1 : 0.75,
             transition: 'opacity 0.2s, transform 0.2s',
-            transform: hov ? 'scale(1.08)' : 'scale(1)',
+            transform: revealed ? 'scale(1.08)' : 'scale(1)',
           }}
         />
         {abbr && (
@@ -1353,7 +1372,7 @@ function AboutPage({ setPage }: { setPage: (p: Page) => void }) {
             </div>
 
             {/* Tools */}
-            <div style={{ borderLeft: `1px solid ${C.border}`, paddingLeft: '3rem' }}>
+            <div className="split-col" style={{ borderLeft: `1px solid ${C.border}`, paddingLeft: '3rem' }}>
               <p style={{ fontFamily: C.font, fontSize: '0.7rem', fontWeight: 700, letterSpacing: '0.18em', textTransform: 'uppercase', color: C.gold, margin: '0 0 1rem' }}>Tools</p>
               <h2 style={{ fontFamily: C.font, fontSize: 'clamp(1.3rem, 2vw, 1.75rem)', fontWeight: 800, color: C.ink, margin: '0 0 0.75rem', letterSpacing: '-0.02em' }}>My stack</h2>
               <p style={{ fontFamily: C.font, fontSize: '0.83rem', color: C.muted, margin: '0 0 2rem' }}>Hover to see the tool name.</p>
@@ -1790,7 +1809,7 @@ function ProsHQPage({ setPage }: { setPage: (p: Page) => void }) {
             </p>
           </div>
 
-          <div style={{ borderLeft: `1px solid ${C.border}`, paddingLeft: '2.5rem' }}>
+          <div className="split-col" style={{ borderLeft: `1px solid ${C.border}`, paddingLeft: '2.5rem' }}>
             <SectionLabel>Project Details</SectionLabel>
             {[
               { label: 'Client',    value: 'Pros HQ' },
@@ -1853,7 +1872,7 @@ function ProsHQPage({ setPage }: { setPage: (p: Page) => void }) {
               </p>
             </div>
 
-            <div style={{ borderLeft: `1px solid ${C.border}`, paddingLeft: '3rem' }}>
+            <div className="split-col" style={{ borderLeft: `1px solid ${C.border}`, paddingLeft: '3rem' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1.5rem' }}>
                 <div style={{ width: 36, height: 36, borderRadius: '50%', background: 'rgba(232,184,75,0.1)', border: `1px solid rgba(232,184,75,0.25)`, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                   <span style={{ fontFamily: C.font, fontSize: '0.65rem', fontWeight: 800, color: C.gold }}>02</span>
@@ -2000,7 +2019,7 @@ function ProsHQPage({ setPage }: { setPage: (p: Page) => void }) {
               { name: 'TaskRabbit',    type: 'Global marketplace',     gap: 'Not localised. Not adapted to the informal artisan economy.' },
               { name: 'Fiverr',        type: 'Digital services',       gap: 'Focused on digital services only — misses physical/local service needs.' },
             ].map((c, i) => (
-              <div key={i} style={{
+              <div key={i} className="compare-row" style={{
                 display: 'grid', gridTemplateColumns: '180px 1fr 1fr',
                 padding: '1.25rem 1.75rem', gap: '1.5rem', alignItems: 'center',
                 background: i % 2 === 0 ? C.panel : 'transparent',
@@ -2018,14 +2037,14 @@ function ProsHQPage({ setPage }: { setPage: (p: Page) => void }) {
             ))}
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1.5rem', marginTop: '3rem' }}>
+          <div className="pillars-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1.5rem', marginTop: '3rem' }}>
             {[
               { n: '01', t: 'Trust-First',       d: 'Mandatory verification, ratings, and escrow — trust is structural, not optional.' },
               { n: '02', t: 'End-to-End',        d: 'Task posting → Matching → Execution → Payment → Review. No handoffs to WhatsApp.' },
               { n: '03', t: 'Localised',         d: 'Built for Nigerian users with Paystack, local pricing, and the informal artisan economy in mind.' },
               { n: '04', t: 'Speed',             d: 'Fast task posting, quick tasker matching, and real-time progress updates throughout.' },
             ].map(d => (
-              <div key={d.n} style={{ padding: '1.75rem', background: C.panel, border: `1px solid ${C.border}`, borderTop: `2px solid ${C.gold}`, borderRadius: 10 }}>
+              <div key={d.n} className="pillar-card" style={{ padding: '1.75rem', background: C.panel, border: `1px solid ${C.border}`, borderTop: `2px solid ${C.gold}`, borderRadius: 10 }}>
                 <div style={{ fontFamily: C.font, fontSize: '0.63rem', fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: C.gold, marginBottom: '0.6rem' }}>{d.n}</div>
                 <h4 style={{ fontFamily: C.font, fontSize: '0.9rem', fontWeight: 700, color: C.ink, margin: '0 0 0.4rem' }}>{d.t}</h4>
                 <p style={{ fontFamily: C.font, fontSize: '0.8rem', lineHeight: 1.7, color: C.muted, margin: 0 }}>{d.d}</p>
@@ -2157,7 +2176,7 @@ function ProsHQPage({ setPage }: { setPage: (p: Page) => void }) {
         </div>
 
         {/* Design callouts */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '0' }}>
+        <div className="phq-callouts-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '0' }}>
           {[
             { n: '01', t: 'Dashboard clarity',   d: 'The client dashboard leads with "Your craft journey starts here" — a wallet balance, active task count, completed count, and a client rating front and centre.' },
             { n: '02', t: 'Transparent applicants', d: 'The applicants page shows each professional\'s photo, verified badge, star rating, completed task count, proposed quote, and cover message. No black boxes.' },
@@ -2166,7 +2185,7 @@ function ProsHQPage({ setPage }: { setPage: (p: Page) => void }) {
             { n: '05', t: 'Ratings close the loop', d: 'After task completion, the client rates the professional 1–5 stars. Reviews are public and directly update the professional\'s profile score.' },
             { n: '06', t: '18-step client journey', d: 'From sign-up to review, every touchpoint was mapped and designed — ensuring no drop-off point goes unaddressed in the flow.' },
           ].map((d, i) => (
-            <div key={i} style={{
+            <div key={i} className="phq-callout-card" style={{
               padding: '2rem 1.75rem',
               borderRight: (i + 1) % 3 !== 0 ? `1px solid ${C.border}` : 'none',
               borderBottom: i < 3 ? `1px solid ${C.border}` : 'none',
@@ -2201,7 +2220,7 @@ function ProsHQPage({ setPage }: { setPage: (p: Page) => void }) {
         <p style={{ fontFamily: C.font, fontSize: '0.9rem', color: C.muted, margin: '0 0 3.5rem', maxWidth: '52ch', lineHeight: 1.75 }}>
           Every feature in the PRD was designed from first principles — with clear functional requirements and acceptance criteria for each system.
         </p>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '0' }}>
+        <div className="phq-callouts-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '0' }}>
           {[
             { n: '01', t: 'Authentication',         d: 'Email-verified registration for both Clients and Professionals. JWT-based access control with role switching (client ↔ professional).' },
             { n: '02', t: 'Task Management',         d: 'Clients create tasks with title, description, budget, location, and date. Tasks appear instantly in the professional dashboard and can be edited before assignment.' },
@@ -2211,7 +2230,7 @@ function ProsHQPage({ setPage }: { setPage: (p: Page) => void }) {
             { n: '06', t: 'Progress Tracking',       d: 'Professionals update stages sequentially: On My Way → Arrived → In Progress → Completed. Each stage is timestamped and reflected instantly on the client dashboard.' },
             { n: '07', t: 'Ratings & Reviews',       d: 'Post-completion, both parties rate each other 1–5 stars with text reviews. Ratings are public, linked to tasks, and update profile scores.' },
           ].map((d, i) => (
-            <div key={i} style={{
+            <div key={i} className="phq-callout-card" style={{
               padding: '2rem 1.75rem',
               borderRight: (i + 1) % 3 !== 0 ? `1px solid ${C.border}` : 'none',
               borderBottom: i < Math.ceil(7 / 3) * 3 - 3 ? `1px solid ${C.border}` : i < 6 ? `1px solid ${C.border}` : 'none',
@@ -2553,7 +2572,7 @@ function MyQuraPage({ setPage }: { setPage: (p: Page) => void }) {
             </p>
           </div>
 
-          <div style={{ borderLeft: `1px solid ${C.border}`, paddingLeft: '2.5rem' }}>
+          <div className="split-col" style={{ borderLeft: `1px solid ${C.border}`, paddingLeft: '2.5rem' }}>
             <SectionLabel>Project Details</SectionLabel>
             {[
               { label: 'Client',       value: 'MyQura / MyCare Assistant' },
@@ -2607,7 +2626,7 @@ function MyQuraPage({ setPage }: { setPage: (p: Page) => void }) {
             </div>
 
             {/* Solution */}
-            <div style={{ borderLeft: `1px solid ${C.border}`, paddingLeft: '3rem' }}>
+            <div className="split-col" style={{ borderLeft: `1px solid ${C.border}`, paddingLeft: '3rem' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1.5rem' }}>
                 <div style={{ width: 36, height: 36, borderRadius: '50%', background: 'rgba(232,184,75,0.1)', border: `1px solid rgba(232,184,75,0.25)`, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                   <span style={{ fontFamily: C.font, fontSize: '0.65rem', fontWeight: 800, color: C.gold }}>02</span>
@@ -3315,37 +3334,38 @@ function SurebasePage({ setPage }: { setPage: (p: Page) => void }) {
     {/* ── Insurance Partner Dashboard ── */}
 <section className="sb-insurance-dashboard">
   <div className="sb-insurance-dashboard-container">
-    <SectionLabel>The Design — Insurance Partner Dashboard</SectionLabel>
+    <SectionLabel>
+      The Design — Insurance Partner Dashboard
+    </SectionLabel>
 
-    <h2 className="sb-section-heading">
+    <h2 className="sb-insurance-heading">
       Command centre for insurers
     </h2>
 
-    <p className="sb-section-description">
-      Insurance partners need a real-time view of their business across
-      products, distribution, claims, and revenue. The dashboard brings those
-      signals together so teams can act without digging through multiple
-      systems.
+    <p className="sb-insurance-description">
+      Insurance partners need a real-time view of their entire operation —
+      from active policies and pending claims to product performance and
+      broker distribution. Every number that matters is above the fold.
     </p>
 
     <div className="sb-insurance-screens">
       <SbScreen
         src={sbInsuranceDashboard}
         alt="Insurance Partner dashboard overview"
-        label="Dashboard Overview — Revenue trend, claims overview, products & distribution at a glance"
+        label="Dashboard Overview — Revenue trend, claims overview, recent policies & claims"
       />
 
       <div className="sb-insurance-secondary-screens">
         <SbScreen
           src={sbInsuranceProducts}
           alt="Insurance Partner products catalogue"
-          label="Products Catalogue — 18 products across Motor, Health & Life"
+          label="Products Catalogue — 18 products across Motor, Health, Travel, Life & Home"
         />
 
         <SbScreen
           src={sbInsuranceDist}
           alt="Insurance Partner distribution network"
-          label="Distribution Network — Active brokers, total sales & performance"
+          label="Distribution Network — Active brokers, total sales, policies distributed"
         />
       </div>
     </div>
@@ -3355,36 +3375,36 @@ function SurebasePage({ setPage }: { setPage: (p: Page) => void }) {
         {
           n: '01',
           t: 'At-a-glance KPIs',
-          d: 'A top navigation sub-tab routes visitors to the right dashboard context, while key business metrics are surfaced immediately so insurers can understand performance without drilling into individual reports.',
+          d: '5 stat cards surface the critical numbers immediately: total products, active policies, pending claims, total premium, and net revenue — all with month-on-month deltas.',
         },
         {
           n: '02',
           t: 'Product management',
-          d: "Insurers can manage their full product catalogue from one place, with product details, availability, pricing information, and the tools needed to keep products aligned with their current offering.",
+          d: 'Insurers can create, configure, and publish products with premium ranges, coverage limits, and underwriting criteria. Status filters (Active / Pending / Inactive) keep the catalogue clean.',
         },
         {
           n: '03',
           t: 'Distribution visibility',
-          d: 'The distribution view gives insurers visibility into their broker network, sales activity, and overall performance across the channels bringing their products to customers.',
+          d: 'The Distribution Network tab shows every active broker — their agent code, products sold, total policies, premium volume, and commission earned. Full transparency in one view.',
         },
         {
           n: '04',
           t: 'Granular role access',
-          d: 'Feature grids are entirely different per page — individual roles only see the information and actions relevant to their responsibilities, reducing noise while keeping sensitive business data protected.',
+          d: 'Five roles — Partner Admin, Underwriter, Claims Officer, Finance Officer, Compliance Officer — each with scoped permissions, so every team member sees only what they need.',
         },
         {
           n: '05',
           t: 'Claims workflow',
-          d: 'Claims activity is surfaced as part of the wider insurer dashboard, giving teams a clear view of claims progress and allowing them to manage the workflow without switching between disconnected systems.',
+          d: 'Claims officers manage submissions, assess documents, communicate decisions, and track settlement status — all within the platform, reducing back-and-forth across external channels.',
         },
         {
           n: '06',
           t: 'Revenue trend chart',
-          d: 'Revenue performance is visualised over time so insurers can quickly identify changes in business performance and understand how their portfolio is trending.',
+          d: 'An 8-month revenue line chart and a grouped claims bar chart give the leadership team performance narrative without opening a spreadsheet.',
         },
       ].map((d) => (
         <div key={d.n} className="sb-insurance-feature">
-          <div className="sb-insurance-feature-number">{d.n}</div>
+          <div className="sb-feature-number">{d.n}</div>
 
           <h4>{d.t}</h4>
 
@@ -3395,7 +3415,7 @@ function SurebasePage({ setPage }: { setPage: (p: Page) => void }) {
   </div>
 </section>
 
-{/* ── Broker Dashboard ── */}
+     {/* ── Broker Dashboard ── */}
 <section className="sb-broker-dashboard">
   <div className="sb-broker-dashboard-container">
     <SectionLabel>The Design — Broker Dashboard</SectionLabel>
@@ -3477,55 +3497,30 @@ function SurebasePage({ setPage }: { setPage: (p: Page) => void }) {
   </div>
 </section>
 
-{/* ── Design System & API Design ── */}
-<section className="sb-design-decisions">
-  <div className="sb-design-decisions-container">
-    <SectionLabel>Design Decisions</SectionLabel>
-
-    <h2 className="sb-section-heading">
-      Principles that held across five user groups
-    </h2>
-
-    <p className="sb-section-description">
-      Designing for multiple user groups under one brand required a strict
-      visual language — so users feel consistency even when the features
-      differ entirely.
-    </p>
-
-    <div className="sb-decision-cards">
-      {[
-        {
-          n: '01',
-          t: 'Shared design language, different contexts',
-          d: 'All dashboards share the same navigation pattern, stat card structure, table format, and status badge system — so onboarding from one portal to another is instant. The green sidebar accent changes per user group to provide orientation without redesigning the shell.',
-        },
-        {
-          n: '02',
-          t: 'Role-based access baked into the design',
-          d: "Every screen was designed with role constraints in mind. A Viewer never sees action buttons. A Claims Officer sees claims, not financials. The UI enforces permissions — not just the backend — so users are never left wondering what they can or can't do.",
-        },
-        {
-          n: '03',
-          t: 'Data density without cognitive overload',
-          d: 'Enterprise dashboards need density, but density without hierarchy creates noise. I used progressive disclosure — KPI cards at the top, charts in the middle, detailed tables below — so users can stop reading at the level of detail they need.',
-        },
-        {
-          n: '04',
-          t: 'Developer-first API documentation',
-          d: 'The Developer Portal was designed for both technical and non-technical users. Endpoint docs include request parameters, response structures, error codes, and sample code — with a sandbox environment and structured production approval workflow.',
-        },
-      ].map((d) => (
-        <div key={d.n} className="sb-decision-card">
-          <div className="sb-feature-number">{d.n}</div>
-
-          <h4>{d.t}</h4>
-
-          <p>{d.d}</p>
+      {/* ── Design System & API Design ── */}
+      <section style={{ maxWidth: 1100, margin: '0 auto', padding: '5rem 2.5rem' }}>
+        <SectionLabel>Design Decisions</SectionLabel>
+        <h2 style={{ fontFamily: C.font, fontSize: 'clamp(1.5rem, 2.5vw, 2.2rem)', fontWeight: 800, color: C.ink, margin: '0 0 0.75rem', letterSpacing: '-0.02em' }}>
+          Principles that held across five user groups
+        </h2>
+        <p style={{ fontFamily: C.font, fontSize: '0.9rem', color: C.muted, margin: '0 0 3.5rem', maxWidth: '55ch', lineHeight: 1.75 }}>
+          Designing for multiple user groups under one brand required a strict visual language — so users feel consistency even when the features differ entirely.
+        </p>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '1.5rem' }} className="about-3col">
+          {[
+            { n: '01', t: 'Shared design language, different contexts', d: 'All dashboards share the same navigation pattern, stat card structure, table format, and status badge system — so onboarding from one portal to another is instant. The green sidebar accent changes per user group to provide orientation without redesigning the shell.' },
+            { n: '02', t: 'Role-based access baked into the design', d: 'Every screen was designed with role constraints in mind. A Viewer never sees action buttons. A Claims Officer sees claims, not financials. The UI enforces permissions — not just the backend — so users are never left wondering what they can or can\'t do.' },
+            { n: '03', t: 'Data density without cognitive overload', d: 'Enterprise dashboards need density, but density without hierarchy creates noise. I used progressive disclosure — KPI cards at the top, charts in the middle, detailed tables below — so users can stop reading at the level of detail they need.' },
+            { n: '04', t: 'Developer-first API documentation', d: 'The Developer Portal was designed for both technical and non-technical users. Endpoint docs include request parameters, response structures, error codes, and sample code — with a sandbox environment and structured production approval workflow.' },
+          ].map((d, i) => (
+            <div key={i} style={{ padding: '2.5rem', background: C.panel, border: `1px solid ${C.border}`, borderRadius: 12 }}>
+              <div style={{ fontFamily: C.font, fontSize: '0.65rem', fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: C.gold, marginBottom: '1rem' }}>{d.n}</div>
+              <h4 style={{ fontFamily: C.font, fontSize: '1rem', fontWeight: 700, color: C.ink, margin: '0 0 0.75rem', letterSpacing: '-0.01em' }}>{d.t}</h4>
+              <p style={{ fontFamily: C.font, fontSize: '0.85rem', lineHeight: 1.8, color: C.muted, margin: 0 }}>{d.d}</p>
+            </div>
+          ))}
         </div>
-      ))}
-    </div>
-  </div>
-</section>
+      </section>
 
       {/* ── What I learned ── */}
       <section style={{ background: 'rgba(238,236,232,0.02)', borderTop: `1px solid ${C.border}`, borderBottom: `1px solid ${C.border}` }}>
