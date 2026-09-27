@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, type FormEvent } from 'react'
 import DeviceMockupImport from './imports/DeviceMockup'
-import SbVideoMockup from './imports/Video'
+
+import surebaseVideo from './imports/Surebase.mp4'
 import logoSVG from './imports/Groups.svg'
 import photo1 from './imports/073A0096-Edit.JPG.jpeg'
 import photo2 from './imports/073A0053-Edit.jpg.jpeg'
@@ -2952,64 +2953,95 @@ const SB_HERO_SLIDES = [
 
 const SB_CANVAS_W = 2000
 const SB_CANVAS_H = 1500
-const SB_DESKTOP  = { top: 338, left: 376, width: 1088, height: 660, radius: 16 }
+const SB_DESKTOP  = { top: 238, left: 460, width: 1088, height: 680, radius: 16 }
 
 function SbHeroMockup() {
   const wrapRef = useRef<HTMLDivElement>(null)
   const [scale, setScale] = useState(1)
-  const [active, setActive] = useState(0)
-  const [prev,   setPrev]   = useState<number | null>(null)
+
+  const videoRef = useRef<HTMLVideoElement>(null)
 
   useEffect(() => {
     const update = () => {
-      if (wrapRef.current) setScale(wrapRef.current.offsetWidth / SB_CANVAS_W)
+      if (wrapRef.current) {
+        setScale(wrapRef.current.offsetWidth / SB_CANVAS_W)
+      }
     }
+
     update()
+
     const ro = new ResizeObserver(update)
     if (wrapRef.current) ro.observe(wrapRef.current)
+
     return () => ro.disconnect()
   }, [])
 
   useEffect(() => {
-    const t = setInterval(() => {
-      setActive(a => {
-        const next = (a + 1) % SB_HERO_SLIDES.length
-        setPrev(a)
-        setTimeout(() => setPrev(null), 580)
-        return next
-      })
-    }, 3600)
-    return () => clearInterval(t)
+    const video = videoRef.current
+    if (!video) return
+
+    video.play().catch(() => {})
   }, [])
 
-  const cur = SB_HERO_SLIDES[active]
-
   return (
-    <div ref={wrapRef} style={{ position: 'relative', width: '100%', height: SB_CANVAS_H * scale }}>
-      {/* Scaled canvas */}
-      <div style={{ position: 'absolute', top: 0, left: 0, transformOrigin: 'top left', transform: `scale(${scale})` }}>
-        <SbVideoMockup />
-
-        {/* Incoming slide (base layer) */}
-        <img src={cur.src} alt={cur.label} style={{
+    <div
+      ref={wrapRef}
+      style={{
+        position: 'relative',
+        width: '100%',
+        height: SB_CANVAS_H * scale,
+        overflow: 'hidden',
+      }}
+    >
+      <div
+        style={{
           position: 'absolute',
-          top: SB_DESKTOP.top, left: SB_DESKTOP.left,
-          width: SB_DESKTOP.width, height: SB_DESKTOP.height,
-          borderRadius: SB_DESKTOP.radius,
-          objectFit: 'cover', objectPosition: 'top', display: 'block',
-        }} />
-
-        {/* Outgoing slide fades out on top */}
-        {prev !== null && (
-          <img key={prev} src={SB_HERO_SLIDES[prev].src} alt={SB_HERO_SLIDES[prev].label} style={{
+          top: 0,
+          left: 0,
+          width: SB_CANVAS_W,
+          height: SB_CANVAS_H,
+          transformOrigin: 'top left',
+          transform: `scale(${scale})`,
+        }}
+      >
+        {/* Surebase device mockup frame */}
+        <img
+          src={sbTabletMockup}
+          alt="Surebase device mockup"
+          style={{
             position: 'absolute',
-            top: SB_DESKTOP.top, left: SB_DESKTOP.left,
-            width: SB_DESKTOP.width, height: SB_DESKTOP.height,
+            top: 0,
+            left: 0,
+            width: SB_CANVAS_W,
+            height: SB_CANVAS_H,
+            objectFit: 'contain',
+            display: 'block',
+            zIndex: 1,
+            pointerEvents: 'none',
+          }}
+        />
+
+        {/* Surebase video inside the device screen */}
+        <video
+          ref={videoRef}
+          src={surebaseVideo}
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="auto"
+          style={{
+            position: 'absolute',
+            top: SB_DESKTOP.top,
+            left: SB_DESKTOP.left,
+            width: SB_DESKTOP.width,
+            height: SB_DESKTOP.height,
             borderRadius: SB_DESKTOP.radius,
-            objectFit: 'cover', objectPosition: 'top', display: 'block',
-            animation: 'proSlideOut 0.58s ease forwards',
-          }} />
-        )}
+            objectFit: 'cover',
+            display: 'block',
+            zIndex: 2,
+          }}
+        />
       </div>
     </div>
   )
