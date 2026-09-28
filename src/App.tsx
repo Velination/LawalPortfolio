@@ -737,7 +737,7 @@ function AboutTeaser({ onAbout }: { onAbout: () => void }) {
       />
 
       <div
-        className="about-3col"
+        className="about-3col boxed-cards"
         style={{
           maxWidth: 1340, margin: '0 auto',
           display: 'grid', gridTemplateColumns: '1fr 380px 1fr',
@@ -902,7 +902,7 @@ function Footer() {
         ))}
       </div>
       <p style={{ fontFamily: C.font, fontSize: '0.75rem', color: C.dim, margin: 0 }}>
-        © 2025 Lawal Olanrewaju
+        © {new Date().getFullYear()} Lawal Olanrewaju
       </p>
     </footer>
   )
@@ -1922,7 +1922,7 @@ function ProsHQPage({ setPage }: { setPage: (p: Page) => void }) {
           Two sides of one marketplace
         </h2>
         <div
-  className="about-3col"
+  className="about-3col boxed-cards"
   style={{
     display: 'grid',
     gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 420px), 1fr))',
@@ -3304,7 +3304,9 @@ function SurebasePage({ setPage }: { setPage: (p: Page) => void }) {
               { n: '05', t: 'Public-Facing Website', d: 'A marketing and onboarding entry point tailored per user group — separate landing pages for Insurance Partners, Brokers, and Corporate Partners with clear value props and social proof.' },
               { n: '06', t: 'API Marketplace', d: 'A centralised catalogue of all insurance APIs — searchable by category, provider, and version — with access management, subscription controls, and usage monitoring.' },
             ].map((s, i) => (
-              <div key={i} style={{ padding: '2rem 1.75rem', borderRight: (i + 1) % 3 !== 0 ? `1px solid ${C.border}` : 'none', borderBottom: i < 3 ? `1px solid ${C.border}` : 'none', borderTop: `1px solid ${C.border}` }}>
+              <div key={i} 
+              className="sb-solution-card" 
+              style={{ padding: '2rem 1.75rem', borderRight: (i + 1) % 3 !== 0 ? `1px solid ${C.border}` : 'none', borderBottom: i < 3 ? `1px solid ${C.border}` : 'none', borderTop: `1px solid ${C.border}` }}>
                 <div style={{ fontFamily: C.font, fontSize: '0.65rem', fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: C.gold, marginBottom: '0.75rem' }}>{s.n}</div>
                 <h3 style={{ fontFamily: C.font, fontSize: '0.95rem', fontWeight: 700, color: C.ink, margin: '0 0 0.5rem' }}>{s.t}</h3>
                 <p style={{ fontFamily: C.font, fontSize: '0.82rem', lineHeight: 1.75, color: C.muted, margin: 0 }}>{s.d}</p>
@@ -3380,18 +3382,16 @@ function SurebasePage({ setPage }: { setPage: (p: Page) => void }) {
         </div>
       </section>
 
-    {/* ── Insurance Partner Dashboard ── */}
+{/* ── Insurance Partner Dashboard ── */}
 <section className="sb-insurance-dashboard">
   <div className="sb-insurance-dashboard-container">
-    <SectionLabel>
-      The Design — Insurance Partner Dashboard
-    </SectionLabel>
+    <SectionLabel>The Design — Insurance Partner Dashboard</SectionLabel>
 
-    <h2 className="sb-insurance-heading">
+    <h2 className="sb-section-heading">
       Command centre for insurers
     </h2>
 
-    <p className="sb-insurance-description">
+    <p className="sb-section-description">
       Insurance partners need a real-time view of their entire operation —
       from active policies and pending claims to product performance and
       broker distribution. Every number that matters is above the fold.
@@ -3454,9 +3454,7 @@ function SurebasePage({ setPage }: { setPage: (p: Page) => void }) {
       ].map((d) => (
         <div key={d.n} className="sb-insurance-feature">
           <div className="sb-feature-number">{d.n}</div>
-
           <h4>{d.t}</h4>
-
           <p>{d.d}</p>
         </div>
       ))}

@@ -1,12 +1,16 @@
 @import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,700&display=swap");
+
 @import "tailwindcss";
 
-/* ── Keyframes ─────────────────────────────────────────────── */
+/* =========================================================
+   KEYFRAMES
+   ========================================================= */
 
 @keyframes proSlideOut {
   from {
     opacity: 1;
   }
+
   to {
     opacity: 0;
   }
@@ -16,6 +20,7 @@
   from {
     transform: translateX(0);
   }
+
   to {
     transform: translateX(-50%);
   }
@@ -25,6 +30,7 @@
   from {
     transform: translateX(0);
   }
+
   to {
     transform: translateX(-50%);
   }
@@ -35,9 +41,11 @@
   100% {
     transform: translate(0, 0) scale(1);
   }
+
   33% {
     transform: translate(50px, -40px) scale(1.1);
   }
+
   66% {
     transform: translate(-20px, 30px) scale(0.95);
   }
@@ -48,9 +56,11 @@
   100% {
     transform: translate(0, 0) scale(1);
   }
+
   33% {
     transform: translate(-40px, 50px) scale(1.08);
   }
+
   66% {
     transform: translate(30px, -20px) scale(0.96);
   }
@@ -61,6 +71,7 @@
   100% {
     transform: translate(0, 0) scale(1);
   }
+
   50% {
     transform: translate(25px, 35px) scale(1.06);
   }
@@ -71,6 +82,7 @@
     opacity: 0;
     transform: translateY(20px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -82,6 +94,7 @@
     opacity: 0;
     transform: translateY(30px) scale(0.97);
   }
+
   to {
     opacity: 1;
     transform: translateY(0) scale(1);
@@ -92,12 +105,15 @@
   from {
     opacity: 0;
   }
+
   to {
     opacity: 1;
   }
 }
 
-/* ── Base ──────────────────────────────────────────────────── */
+/* =========================================================
+   BASE
+   ========================================================= */
 
 html {
   overflow-x: hidden;
@@ -116,27 +132,35 @@ body {
 * {
   box-sizing: border-box;
 }
+
 ::-webkit-scrollbar {
   width: 0;
   height: 0;
 }
 
-/* ── Animation helpers ─────────────────────────────────────── */
+/* =========================================================
+   ANIMATION HELPERS
+   ========================================================= */
 
 .anim-in {
   animation: fadeUp 0.7s ease both;
 }
+
 .anim-in-2 {
   animation: fadeUp 0.7s ease 0.1s both;
 }
+
 .anim-in-3 {
   animation: fadeUp 0.7s ease 0.22s both;
 }
+
 .anim-in-4 {
   animation: fadeUp 0.7s ease 0.35s both;
 }
 
-/* ── Pill buttons ──────────────────────────────────────────── */
+/* =========================================================
+   PILL BUTTONS
+   ========================================================= */
 
 .pill {
   display: inline-flex;
@@ -156,23 +180,29 @@ body {
   border: none;
   white-space: nowrap;
 }
+
 .pill-gold {
   background: #e8b84b;
   color: #0a0a0a;
 }
+
 .pill-gold:hover {
   opacity: 0.82;
 }
+
 .pill-ghost {
   background: rgba(238, 236, 232, 0.07);
   color: #eeece8;
   border: 1px solid rgba(238, 236, 232, 0.13);
 }
+
 .pill-ghost:hover {
   background: rgba(238, 236, 232, 0.13);
 }
 
-/* ── Work card hover ───────────────────────────────────────── */
+/* =========================================================
+   WORK CARDS
+   ========================================================= */
 
 .work-card {
   border: 1px solid rgba(238, 236, 232, 0.12);
@@ -186,13 +216,16 @@ body {
   display: flex;
   flex-direction: column;
 }
+
 .work-card:hover {
   border-color: rgba(232, 184, 75, 0.35);
   transform: translateY(-6px);
 }
+
 .work-card:hover .card-img {
   transform: scale(1.04);
 }
+
 .card-img {
   transition: transform 0.5s ease;
   width: 100%;
@@ -201,7 +234,9 @@ body {
   display: block;
 }
 
-/* ── Contact form fields ───────────────────────────────────── */
+/* =========================================================
+   CONTACT FORM
+   ========================================================= */
 
 .cf-field {
   width: 100%;
@@ -217,209 +252,59 @@ body {
   transition: border-color 0.2s;
   resize: none;
 }
+
 .cf-field::placeholder {
   color: rgba(238, 236, 232, 0.3);
 }
+
 .cf-field:focus {
   border-bottom-color: #e8b84b;
 }
 
-/* ── Responsive ────────────────────────────────────────────── */
-
-/* Two pills side by side (Get in touch / WhatsApp, etc.) are tight
-   at a 402px frame already; anything a bit narrower wraps them. */
-@media (max-width: 400px) {
-  .pill {
-    padding: 0.75rem 1.25rem;
-    font-size: 0.8rem;
-  }
-}
+/* =========================================================
+   RESPONSIVE — TABLET / GENERAL
+   ========================================================= */
 
 @media (max-width: 960px) {
   .cards-row {
     flex-direction: column !important;
   }
+
   .cards-row .work-card {
     margin-top: 0 !important;
   }
+
   .about-3col {
     grid-template-columns: 1fr !important;
   }
+
   .about-3col .col-photo {
     display: none !important;
   }
+
   .split-col {
     border-left: none !important;
     padding-left: 0 !important;
   }
+
   .mockup-pair-grid {
     grid-template-columns: 1fr !important;
     width: 85% !important;
   }
+
   .skills-grid {
     grid-template-columns: 1fr 1fr !important;
   }
-  .phq-flow-steps {
-    grid-template-columns: 1fr 1fr !important;
-  }
+
+  .phq-flow-steps,
   .phq-flow-grid {
     grid-template-columns: 1fr 1fr !important;
   }
 }
-@media (max-width: 600px) {
-  .skills-grid {
-    grid-template-columns: 1fr !important;
-  }
-  .phq-flow-steps {
-    grid-template-columns: 1fr 1fr !important;
-  }
-  /* Figma mobile frame stacks all 4 screenshots full-width, not 2x2 */
-  .phq-flow-grid {
-    grid-template-columns: 1fr !important;
-  }
 
-  .phq-callouts-grid {
-    grid-template-columns: 1fr !important;
-  }
-  .phq-callout-card {
-    border-left: 1px solid rgba(238, 236, 232, 0.12) !important;
-    border-right: 1px solid rgba(238, 236, 232, 0.12) !important;
-    border-bottom: none !important;
-  }
-  .phq-callout-card:last-child {
-    border-bottom: 1px solid rgba(238, 236, 232, 0.12) !important;
-  }
-
-  /* Once skills-grid is a single column, the 3-col border-right/
-     border-bottom divider math no longer applies — box each card
-     instead, collapsing shared borders between stacked rows. */
-  .skills-grid .skill-card {
-    border: 1px solid rgba(238, 236, 232, 0.12) !important;
-    border-top: none !important;
-  }
-  .skills-grid .skill-card:first-child {
-    border-top: 1px solid rgba(238, 236, 232, 0.12) !important;
-  }
-
-  .retro-grid {
-    grid-template-columns: 1fr !important;
-  }
-
-  /* Admin stats row isn't present on the mobile Figma frame at all */
-  .admin-stats-grid {
-    display: none !important;
-  }
-
-  .sb-feature-grid {
-    grid-template-columns: 1fr !important;
-  }
-  .sb-feature-card {
-    border-left: 1px solid rgba(238, 236, 232, 0.12) !important;
-    border-right: 1px solid rgba(238, 236, 232, 0.12) !important;
-    border-bottom: none !important;
-  }
-  .sb-feature-card:last-child {
-    border-bottom: 1px solid rgba(238, 236, 232, 0.12) !important;
-  }
-
-  .sb-web-slide-label {
-    padding-top: 96px !important;
-  }
-
-  .compare-row {
-    grid-template-columns: 1fr !important;
-    gap: 0.5rem !important;
-    align-items: start !important;
-  }
-
-  .pillars-grid {
-    grid-template-columns: 1fr !important;
-    gap: 1rem !important;
-  }
-  /* Mobile drops the gold top accent — plain uniform border only */
-  .pillar-card {
-    border-top: 1px solid rgba(238, 236, 232, 0.12) !important;
-  }
-}
-
-/* Nav — mobile (matches Figma mobile frame, 402px) */
-@media (max-width: 480px) {
-  .site-nav {
-    justify-content: space-between !important;
-    gap: 1.5rem !important;
-  }
-  .nav-links {
-    gap: 1rem !important;
-  }
-
-  /* Figma's mobile logo mark is narrower than the square desktop icon */
-  .nav-logo-img {
-    width: 14.95px !important;
-    height: 37.99px !important;
-  }
-
-  .nav-pill {
-    padding: 4.8px 4px 4.8px 4.8px !important;
-    gap: 8px !important;
-  }
-  .nav-pill-avatar {
-    width: 22px !important;
-    height: 22px !important;
-    border-radius: 12.5115px !important;
-  }
-  /* Mobile pill drops the "Available" text and shows only the status dot */
-  .nav-pill-label {
-    font-size: 0 !important;
-    display: flex !important;
-    align-items: center !important;
-  }
-  .nav-pill-dot {
-    font-size: 8.8px !important;
-    margin-right: 0 !important;
-  }
-}
-
-/* Tools chips ("My stack") — mobile: idle state shows the 2-letter
-   abbreviation; hover/tap cross-fades to the real logo (same `hov`
-   state the chip already uses for its border/background highlight,
-   and which also drives the existing name tooltip). */
-@media (max-width: 480px) {
-  .tool-chip-img {
-    opacity: 0 !important;
-  }
-  .tool-chip-abbr {
-    display: flex !important;
-    opacity: 1;
-  }
-  .tool-chip-box.is-hovered .tool-chip-img {
-    opacity: 1 !important;
-  }
-  .tool-chip-box.is-hovered .tool-chip-abbr {
-    opacity: 0 !important;
-  }
-  .tool-chip-tooltip {
-    display: none !important;
-  }
-}
-/* ─────────────────────────────────────────────────────────────
-   Surebase — Broker Dashboard
-   ───────────────────────────────────────────────────────────── */
-
-.sb-broker-dashboard {
-  box-sizing: border-box;
-  width: 100%;
-  background: rgba(238, 236, 232, 0.02);
-  border-top: 1px solid rgba(238, 236, 232, 0.12);
-  border-bottom: 1px solid rgba(238, 236, 232, 0.12);
-}
-
-.sb-broker-dashboard-container {
-  box-sizing: border-box;
-  width: 100%;
-  max-width: 1100px;
-  margin: 0 auto;
-  padding: 80px 40px;
-}
+/* =========================================================
+   SUREBASE — SHARED DESKTOP STYLES
+   ========================================================= */
 
 .sb-section-heading {
   margin: 16px 0 0;
@@ -439,48 +324,6 @@ body {
   line-height: 25px;
   font-weight: 400;
   color: rgba(238, 236, 232, 0.5);
-}
-
-/* Broker screenshots */
-
-.sb-broker-screens {
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
-  margin-top: 56px;
-}
-
-.sb-broker-screens > div:first-child {
-  width: 100%;
-}
-
-.sb-broker-secondary-screens {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 24px;
-}
-
-/* Broker feature cards */
-
-.sb-broker-features {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  margin-top: 56px;
-}
-
-.sb-broker-feature {
-  box-sizing: border-box;
-  padding: 32px 28px;
-  border-top: 1px solid rgba(238, 236, 232, 0.12);
-  border-right: 1px solid rgba(238, 236, 232, 0.12);
-}
-
-.sb-broker-feature:nth-child(3n) {
-  border-right: 0;
-}
-
-.sb-broker-feature:nth-child(n + 4) {
-  border-bottom: 1px solid rgba(238, 236, 232, 0.12);
 }
 
 .sb-feature-number {
@@ -513,9 +356,67 @@ body {
   color: rgba(238, 236, 232, 0.5);
 }
 
-/* ─────────────────────────────────────────────────────────────
-   Surebase — Design Decisions
-   ───────────────────────────────────────────────────────────── */
+/* =========================================================
+   SUREBASE — BROKER DASHBOARD
+   ========================================================= */
+
+.sb-broker-dashboard {
+  box-sizing: border-box;
+  width: 100%;
+  background: rgba(238, 236, 232, 0.02);
+  border-top: 1px solid rgba(238, 236, 232, 0.12);
+  border-bottom: 1px solid rgba(238, 236, 232, 0.12);
+}
+
+.sb-broker-dashboard-container {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 80px 40px;
+}
+
+.sb-broker-screens {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  margin-top: 56px;
+}
+
+.sb-broker-screens > div:first-child {
+  width: 100%;
+}
+
+.sb-broker-secondary-screens {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+
+.sb-broker-features {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  margin-top: 56px;
+}
+
+.sb-broker-feature {
+  box-sizing: border-box;
+  padding: 32px 28px;
+  border-top: 1px solid rgba(238, 236, 232, 0.12);
+  border-right: 1px solid rgba(238, 236, 232, 0.12);
+}
+
+.sb-broker-feature:nth-child(3n) {
+  border-right: 0;
+}
+
+.sb-broker-feature:nth-child(n + 4) {
+  border-bottom: 1px solid rgba(238, 236, 232, 0.12);
+}
+
+/* =========================================================
+   SUREBASE — DESIGN DECISIONS
+   ========================================================= */
 
 .sb-design-decisions {
   box-sizing: border-box;
@@ -558,110 +459,9 @@ body {
   line-height: 24px;
 }
 
-/* ─────────────────────────────────────────────────────────────
-   Surebase — Mobile
-   Figma frame: 402px
-   ───────────────────────────────────────────────────────────── */
-
-@media (max-width: 600px) {
-  .sb-broker-dashboard-container,
-  .sb-design-decisions-container {
-    padding: 80px 40px;
-  }
-
-  .sb-section-heading {
-    width: 100%;
-    font-size: 24px;
-    line-height: 36px;
-  }
-
-  .sb-section-description {
-    width: 100%;
-    max-width: none;
-    font-size: 14.4px;
-    line-height: 25px;
-  }
-
-  /* Broker screenshots */
-
-  .sb-broker-screens {
-    margin-top: 56px;
-    gap: 24px;
-  }
-
-  .sb-broker-secondary-screens {
-    display: flex;
-    flex-direction: column;
-    gap: 24px;
-  }
-
-  /* Broker feature cards */
-
-  .sb-broker-features {
-    display: flex;
-    flex-direction: column;
-    margin-top: 56px;
-  }
-
-  .sb-broker-feature {
-    width: 100%;
-    min-height: 239.2px;
-    padding: 32px 28px;
-    border-right: 1px solid rgba(238, 236, 232, 0.12);
-    border-bottom: 0;
-  }
-
-  .sb-broker-feature:nth-child(3n) {
-    border-right: 1px solid rgba(238, 236, 232, 0.12);
-  }
-
-  .sb-broker-feature:last-child {
-    border-bottom: 1px solid rgba(238, 236, 232, 0.12);
-  }
-
-  .sb-broker-feature h4 {
-    font-size: 14.72px;
-    line-height: 22px;
-  }
-
-  .sb-broker-feature p {
-    font-size: 13.12px;
-    line-height: 23px;
-  }
-
-  /* Design Decisions */
-
-  .sb-decision-cards {
-    display: flex;
-    flex-direction: column;
-    gap: 24px;
-    margin-top: 56px;
-  }
-
-  .sb-decision-card {
-    width: 100%;
-    min-height: 345.22px;
-    padding: 40px;
-  }
-
-  .sb-decision-card h4 {
-    font-size: 16px;
-    line-height: 24px;
-  }
-
-  .sb-decision-card p {
-    font-size: 13.6px;
-    line-height: 24px;
-  }
-
-  .sb-decision-card:first-child,
-  .sb-decision-card:last-child {
-    min-height: 369.69px;
-  }
-}
-/* ============================================================
+/* =========================================================
    SUREBASE — INSURANCE PARTNER DASHBOARD
-   ============================================================ */
+   ========================================================= */
 
 .sb-insurance-dashboard {
   box-sizing: border-box;
@@ -676,42 +476,20 @@ body {
   padding: 80px 40px;
 }
 
-/* Heading */
-
 .sb-insurance-dashboard .sb-section-heading {
   margin: 16px 0 0;
-
-  font-family: "Plus Jakarta Sans", sans-serif;
-  font-size: 24px;
-  line-height: 36px;
-  font-weight: 800;
-  letter-spacing: -0.48px;
-
-  color: #eeece8;
 }
 
 .sb-insurance-dashboard .sb-section-description {
   width: 100%;
   max-width: 55ch;
   margin: 12px 0 0;
-
-  font-family: "Plus Jakarta Sans", sans-serif;
-  font-size: 14.4px;
-  line-height: 25px;
-  font-weight: 400;
-
-  color: rgba(238, 236, 232, 0.5);
 }
-
-/* ============================================================
-   SCREENSHOTS
-   ============================================================ */
 
 .sb-insurance-screens {
   display: flex;
   flex-direction: column;
   gap: 24px;
-
   margin-top: 56px;
 }
 
@@ -720,27 +498,20 @@ body {
 }
 
 .sb-insurance-secondary-screens {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
   gap: 24px;
 }
-
-/* ============================================================
-   FEATURE GRID
-   ============================================================ */
 
 .sb-insurance-features {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-
   margin-top: 56px;
 }
 
 .sb-insurance-feature {
   box-sizing: border-box;
-
   padding: 32px 28px;
-
   border-top: 1px solid rgba(238, 236, 232, 0.12);
   border-right: 1px solid rgba(238, 236, 232, 0.12);
 }
@@ -753,81 +524,285 @@ body {
   border-bottom: 1px solid rgba(238, 236, 232, 0.12);
 }
 
-/* Number */
-
-.sb-insurance-feature-number {
+.sb-insurance-feature-number,
+.sb-insurance-feature .sb-feature-number {
   font-family: "Plus Jakarta Sans", sans-serif;
   font-size: 10.4px;
   line-height: 16px;
   font-weight: 700;
   letter-spacing: 1.456px;
   text-transform: uppercase;
-
   color: #e8b84b;
 }
 
-/* Heading */
-
 .sb-insurance-feature h4 {
   margin: 12px 0 0;
-
   font-family: "Plus Jakarta Sans", sans-serif;
   font-size: 14.72px;
   line-height: 22px;
   font-weight: 700;
-
   color: #eeece8;
 }
 
-/* Description */
-
 .sb-insurance-feature p {
   margin: 8px 0 0;
-
   font-family: "Plus Jakarta Sans", sans-serif;
   font-size: 13.12px;
   line-height: 23px;
   font-weight: 400;
-
   color: rgba(238, 236, 232, 0.5);
 }
 
-/* ============================================================
-   MOBILE — FIGMA 402px
-   ============================================================ */
+/* =========================================================
+   RESPONSIVE — MOBILE
+   Figma reference: 402px
+   ========================================================= */
 
 @media (max-width: 600px) {
+  /* -------------------------------------------------------
+     General layout
+     ------------------------------------------------------- */
+
+  .pill {
+    padding: 0.75rem 1.25rem;
+    font-size: 0.8rem;
+  }
+
+  .skills-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .phq-flow-steps {
+    grid-template-columns: 1fr 1fr !important;
+  }
+
+  .phq-flow-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .phq-callouts-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .retro-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .admin-stats-grid {
+    display: none !important;
+  }
+
+  .sb-feature-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .compare-row {
+    grid-template-columns: 1fr !important;
+    gap: 0.5rem !important;
+    align-items: start !important;
+  }
+
+  .pillars-grid {
+    grid-template-columns: 1fr !important;
+    gap: 1rem !important;
+  }
+
+  .sb-web-slide-label {
+    padding-top: 96px !important;
+  }
+
+  /* -------------------------------------------------------
+     Shared Surebase section layout
+     ------------------------------------------------------- */
+
+  .sb-broker-dashboard-container,
+  .sb-design-decisions-container,
   .sb-insurance-dashboard-container {
     width: 100%;
     max-width: none;
-
     padding: 80px 40px;
   }
 
+  .sb-section-heading,
   .sb-insurance-dashboard .sb-section-heading {
     width: 100%;
-
     font-size: 24px;
     line-height: 36px;
     letter-spacing: -0.48px;
   }
 
+  .sb-section-description,
   .sb-insurance-dashboard .sb-section-description {
     width: 100%;
     max-width: none;
-
     font-size: 14.4px;
     line-height: 25px;
   }
 
-  /* ----------------------------------------------------------
-     Screens
-     ---------------------------------------------------------- */
+  /* -------------------------------------------------------
+     ProsHQ callout cards
+     ------------------------------------------------------- */
+
+  .phq-callout-card {
+    border-left: 1px solid rgba(238, 236, 232, 0.22) !important;
+    border-right: 1px solid rgba(238, 236, 232, 0.22) !important;
+    border-bottom: none !important;
+  }
+
+  .phq-callout-card:last-child {
+    border-bottom: 1px solid rgba(238, 236, 232, 0.22) !important;
+  }
+
+  /* -------------------------------------------------------
+     Skills cards
+     ------------------------------------------------------- */
+
+  .skills-grid .skill-card {
+    border: 1px solid rgba(238, 236, 232, 0.22) !important;
+    border-top: none !important;
+  }
+
+  .skills-grid .skill-card:first-child {
+    border-top: 1px solid rgba(238, 236, 232, 0.22) !important;
+  }
+
+  /* -------------------------------------------------------
+     Surebase feature cards
+     ------------------------------------------------------- */
+
+  .sb-feature-card {
+    border-left: 1px solid rgba(238, 236, 232, 0.22) !important;
+    border-right: 1px solid rgba(238, 236, 232, 0.22) !important;
+    border-bottom: none !important;
+  }
+
+  .sb-feature-card:last-child {
+    border-bottom: 1px solid rgba(238, 236, 232, 0.22) !important;
+  }
+
+  /* -------------------------------------------------------
+     Solution cards
+     ------------------------------------------------------- */
+
+  .sb-solution-card {
+    border: 1px solid rgba(238, 236, 232, 0.22) !important;
+    border-top: none !important;
+  }
+
+  .sb-solution-card:first-child {
+    border-top: 1px solid rgba(238, 236, 232, 0.22) !important;
+  }
+
+  /* -------------------------------------------------------
+     Pillar cards
+     ------------------------------------------------------- */
+
+  .pillar-card {
+    border: 1px solid rgba(238, 236, 232, 0.22) !important;
+  }
+
+  /* -------------------------------------------------------
+     Retro / boxed card grids
+     ------------------------------------------------------- */
+
+  .retro-grid > div,
+  .boxed-cards > div {
+    border-color: rgba(238, 236, 232, 0.22) !important;
+  }
+
+  /* -------------------------------------------------------
+     Broker screenshots
+     ------------------------------------------------------- */
+
+  .sb-broker-screens {
+    margin-top: 56px;
+    gap: 24px;
+  }
+
+  .sb-broker-secondary-screens {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  /* -------------------------------------------------------
+     Broker feature cards
+     ------------------------------------------------------- */
+
+  .sb-broker-features {
+    display: flex;
+    flex-direction: column;
+    margin-top: 56px;
+  }
+
+  .sb-broker-feature {
+    width: 100%;
+    min-height: 239.2px;
+    padding: 32px 28px;
+    border-top: 1px solid rgba(238, 236, 232, 0.22);
+    border-left: 1px solid rgba(238, 236, 232, 0.22);
+    border-right: 1px solid rgba(238, 236, 232, 0.22);
+    border-bottom: none;
+  }
+
+  .sb-broker-feature:nth-child(3n) {
+    border-right: 1px solid rgba(238, 236, 232, 0.22);
+  }
+
+  .sb-broker-feature:last-child {
+    border-bottom: 1px solid rgba(238, 236, 232, 0.22);
+  }
+
+  .sb-broker-feature h4 {
+    font-size: 14.72px;
+    line-height: 22px;
+  }
+
+  .sb-broker-feature p {
+    font-size: 13.12px;
+    line-height: 23px;
+  }
+
+  /* -------------------------------------------------------
+     Design Decisions cards
+     ------------------------------------------------------- */
+
+  .sb-decision-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    margin-top: 56px;
+  }
+
+  .sb-decision-card {
+    width: 100%;
+    min-height: 345.22px;
+    padding: 40px;
+    border: 1px solid rgba(238, 236, 232, 0.22) !important;
+  }
+
+  .sb-decision-card:first-child,
+  .sb-decision-card:last-child {
+    min-height: 369.69px;
+  }
+
+  .sb-decision-card h4 {
+    font-size: 16px;
+    line-height: 24px;
+  }
+
+  .sb-decision-card p {
+    font-size: 13.6px;
+    line-height: 24px;
+  }
+
+  /* -------------------------------------------------------
+     Insurance screenshots
+     ------------------------------------------------------- */
 
   .sb-insurance-screens {
     display: flex;
     flex-direction: column;
-
     gap: 24px;
     margin-top: 56px;
   }
@@ -835,49 +810,33 @@ body {
   .sb-insurance-secondary-screens {
     display: flex;
     flex-direction: column;
-
     gap: 24px;
   }
 
-  /* ----------------------------------------------------------
-     Feature cards
-     ---------------------------------------------------------- */
+  /* -------------------------------------------------------
+     Insurance feature cards
+     ------------------------------------------------------- */
 
   .sb-insurance-features {
     display: flex;
     flex-direction: column;
-
     width: 100%;
-
     margin-top: 56px;
   }
 
   .sb-insurance-feature {
     width: 100%;
-
     padding: 32px 28px;
-
-    border-left: 1px solid rgba(238, 236, 232, 0.12);
-    border-right: 1px solid rgba(238, 236, 232, 0.12);
+    border-top: 1px solid rgba(238, 236, 232, 0.22);
+    border-left: 1px solid rgba(238, 236, 232, 0.22);
+    border-right: 1px solid rgba(238, 236, 232, 0.22);
     border-bottom: none;
   }
 
-  /*
-    Figma card heights:
-
-    01 → 239.20px
-    02 → 239.20px
-    03 → 240.40px
-    04 → 239.20px
-    05 → 239.20px
-    06 → 216.20px
-  */
-
-  .sb-insurance-feature:nth-child(1) {
-    min-height: 239.2px;
-  }
-
-  .sb-insurance-feature:nth-child(2) {
+  .sb-insurance-feature:nth-child(1),
+  .sb-insurance-feature:nth-child(2),
+  .sb-insurance-feature:nth-child(4),
+  .sb-insurance-feature:nth-child(5) {
     min-height: 239.2px;
   }
 
@@ -885,38 +844,97 @@ body {
     min-height: 240.4px;
   }
 
-  .sb-insurance-feature:nth-child(4) {
-    min-height: 239.2px;
-  }
-
-  .sb-insurance-feature:nth-child(5) {
-    min-height: 239.2px;
-  }
-
   .sb-insurance-feature:nth-child(6) {
     min-height: 216.2px;
-    border-bottom: 1px solid rgba(238, 236, 232, 0.12);
-  }
-
-  /* Typography */
-
-  .sb-insurance-feature-number {
-    font-size: 10.4px;
-    line-height: 16px;
-    letter-spacing: 1.456px;
+    border-bottom: 1px solid rgba(238, 236, 232, 0.22);
   }
 
   .sb-insurance-feature h4 {
-    margin-top: 12px;
-
     font-size: 14.72px;
     line-height: 22px;
   }
 
   .sb-insurance-feature p {
-    margin-top: 8px;
-
     font-size: 13.12px;
     line-height: 23px;
+  }
+}
+
+/* =========================================================
+   NAV — MOBILE
+   Figma mobile frame: 402px
+   ========================================================= */
+
+@media (max-width: 480px) {
+  .site-nav {
+    justify-content: space-between !important;
+    gap: 1.5rem !important;
+  }
+
+  .nav-links {
+    gap: 1rem !important;
+  }
+
+  .nav-logo-img {
+    width: 14.95px !important;
+    height: 37.99px !important;
+  }
+
+  .nav-pill {
+    padding: 4.8px 4px 4.8px 4.8px !important;
+    gap: 8px !important;
+  }
+
+  .nav-pill-avatar {
+    width: 22px !important;
+    height: 22px !important;
+    border-radius: 12.5115px !important;
+  }
+
+  .nav-pill-label {
+    font-size: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+  }
+
+  .nav-pill-dot {
+    font-size: 8.8px !important;
+    margin-right: 0 !important;
+  }
+
+  /* -------------------------------------------------------
+     Tool chips
+     ------------------------------------------------------- */
+
+  .tool-chip-img {
+    opacity: 0 !important;
+  }
+
+  .tool-chip-abbr {
+    display: flex !important;
+    opacity: 1;
+  }
+
+  .tool-chip-box.is-hovered .tool-chip-img {
+    opacity: 1 !important;
+  }
+
+  .tool-chip-box.is-hovered .tool-chip-abbr {
+    opacity: 0 !important;
+  }
+
+  .tool-chip-tooltip {
+    display: none !important;
+  }
+}
+
+/* =========================================================
+   VERY SMALL SCREENS
+   ========================================================= */
+
+@media (max-width: 400px) {
+  .pill {
+    padding: 0.75rem 1.25rem;
+    font-size: 0.8rem;
   }
 }
