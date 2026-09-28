@@ -701,7 +701,7 @@ function WorkCards({ onViewAll, onMyQura, onProsHQ, onSurebase }: { onViewAll: (
             <div style={{ height: 1, background: C.border, margin: '0 1.75rem' }} />
 
             {/* Screenshot preview */}
-            <div style={{ margin: '1.25rem 1.25rem 0', borderRadius: '10px 10px 0 0', overflow: 'hidden', flex: 1, minHeight: 180, background: '#111' }}>
+            <div style={{ margin: '1.25rem 1.25rem 0', borderRadius: '10px 10px', overflow: 'hidden', flex: 1, minHeight: 180, background: '#111' }}>
               <img src={p.img} alt={p.name} className="card-img" style={{ minHeight: 180, objectFit: 'cover', objectPosition: 'top' }} />
             </div>
           </div>
@@ -1130,15 +1130,20 @@ function ToolChip({
   src,
   accent,
   abbr,
+  activeTool,
+  setActiveTool,
 }: {
   name: string
   src: string
   accent: string
   abbr?: string
+  activeTool: string | null
+  setActiveTool: React.Dispatch<React.SetStateAction<string | null>>
 }) {
-  const [hov, setHov] = useState(false)
-
-  const revealed = hov
+  const isMobile = window.matchMedia('(max-width: 480px)').matches
+  const revealed = isMobile
+    ? activeTool === name
+    : undefined
 
   return (
     <div
@@ -1149,12 +1154,19 @@ function ToolChip({
         alignItems: 'center',
         gap: '0.5rem',
       }}
-      onMouseEnter={() => setHov(true)}
-      onMouseLeave={() => setHov(false)}
-      onClick={(e) => {
+      onMouseEnter={() => {
+        if (!window.matchMedia('(max-width: 480px)').matches) {
+          setActiveTool(name)
+        }
+      }}
+      onMouseLeave={() => {
+        if (!window.matchMedia('(max-width: 480px)').matches) {
+          setActiveTool(null)
+        }
+      }}
+      onClick={() => {
         if (window.matchMedia('(max-width: 480px)').matches) {
-          e.stopPropagation()
-          setHov(prev => !prev)
+          setActiveTool(prev => (prev === name ? null : name))
         }
       }}
     >
@@ -1165,7 +1177,9 @@ function ToolChip({
           position: 'absolute',
           bottom: '100%',
           left: '50%',
-          transform: `translateX(-50%) translateY(${revealed ? '-6px' : '0px'})`,
+          transform: `translateX(-50%) translateY(${
+            revealed ? '-6px' : '0px'
+          })`,
           background: '#1a1a1a',
           border: `1px solid ${C.border}`,
           borderRadius: 6,
@@ -1207,9 +1221,10 @@ function ToolChip({
           width: 56,
           height: 56,
           borderRadius: 14,
-          background: revealed
-            ? `rgba(${hexToRgb(accent)}, 0.1)`
-            : 'rgba(238,236,232,0.04)',
+          background:
+            revealed
+              ? `rgba(${hexToRgb(accent)}, 0.1)`
+              : 'rgba(238,236,232,0.04)',
           border: `1px solid ${revealed ? accent : C.border}`,
           display: 'flex',
           alignItems: 'center',
@@ -1312,7 +1327,9 @@ const SKILLS_ABOUT = [
   { name: 'Regulated-industry Domain Expertise',   desc: 'Deep familiarity with healthtech, fintech, and insurtech constraints and compliance.' },
 ]
 
-function AboutPage({ setPage }: { setPage: (p: Page) => void }) {
+function AboutPage({ setPage }: { setPage: (p: Page) =>
+   void }) {
+    const [activeTool, setActiveTool] = useState<string | null>(null)
   return (
     <div style={{ position: 'relative', zIndex: 1, paddingTop: 68 }}>
 
@@ -1431,14 +1448,17 @@ function AboutPage({ setPage }: { setPage: (p: Page) => void }) {
               <h2 style={{ fontFamily: C.font, fontSize: 'clamp(1.3rem, 2vw, 1.75rem)', fontWeight: 800, color: C.ink, margin: '0 0 0.75rem', letterSpacing: '-0.02em' }}>My stack</h2>
               <p style={{ fontFamily: C.font, fontSize: '0.83rem', color: C.muted, margin: '0 0 2rem' }}>Hover to see the tool name.</p>
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.85rem' }}>
-                {TOOLS.map(t => (
-  <ToolChip
-    key={t.name}
-    name={t.name}
-    src={t.src}
-    accent={t.accent}
-    abbr={t.abbr}
-  />
+
+              {TOOLS.map(t => (
+                <ToolChip
+                  key={t.name}
+                  name={t.name}
+                  src={t.src}
+                  accent={t.accent}
+                  abbr={t.abbr}
+                  activeTool={activeTool}
+                  setActiveTool={setActiveTool}
+                />
 ))}
               </div>
             </div>
