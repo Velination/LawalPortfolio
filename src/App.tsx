@@ -985,29 +985,111 @@ function HomePage({ setPage, onContact }: { setPage: (p: Page) => void; onContac
 
       {/* Services */}
       <section style={{ maxWidth: 900, margin: '0 auto', padding: '6rem 2.5rem' }}>
-        <p style={{ fontFamily: C.font, fontSize: '0.7rem', fontWeight: 700, letterSpacing: '0.18em', textTransform: 'uppercase', color: C.gold, margin: '0 0 1rem' }}>Services</p>
-        <h2 style={{ fontFamily: C.font, fontSize: 'clamp(1.5rem, 2.5vw, 2rem)', fontWeight: 800, color: C.ink, margin: '0 0 3rem', letterSpacing: '-0.02em' }}>
+        <p
+          style={{
+            fontFamily: C.font,
+            fontSize: '0.7rem',
+            fontWeight: 700,
+            letterSpacing: '0.18em',
+            textTransform: 'uppercase',
+            color: C.gold,
+            margin: '0 0 1rem',
+          }}
+        >
+          Services
+        </p>
+
+        <h2
+          style={{
+            fontFamily: C.font,
+            fontSize: 'clamp(1.5rem, 2.5vw, 2rem)',
+            fontWeight: 800,
+            color: C.ink,
+            margin: '0 0 3rem',
+            letterSpacing: '-0.02em',
+          }}
+        >
           What I bring to your product
         </h2>
-        <div className="skills-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)' }}>
+
+        <div
+          className="skills-grid"
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(3, 1fr)',
+          }}
+        >
           {[
-            { n: 'Product Strategy',                        d: 'Connecting user needs to business goals through decisions that compound over time.' },
-            { n: 'End-to-end System Design',               d: 'From discovery and architecture to shipped UI — owning the full design lifecycle.' },
-            { n: 'AI-augmented Design Velocity',           d: 'Leveraging AI tools to ideate, prototype, and iterate at a pace that surprises teams.' },
-            { n: 'Design Systems & Scalability',           d: 'Scalable component libraries that grow with your product and unify every touchpoint.' },
-            { n: 'Stakeholder & Cross-functional Facilitation', d: 'Translating between engineering, business, and users — keeping every team aligned.' },
-            { n: 'Regulated-industry Domain Expertise',    d: 'Deep familiarity with healthtech, fintech, and insurtech constraints and compliance.' },
+            {
+              n: 'Product Strategy',
+              d: 'Connecting user needs to business goals through decisions that compound over time.',
+            },
+            {
+              n: 'End-to-end System Design',
+              d: 'From discovery and architecture to shipped UI — owning the full design lifecycle.',
+            },
+            {
+              n: 'AI-augmented Design Velocity',
+              d: 'Leveraging AI tools to ideate, prototype, and iterate at a pace that surprises teams.',
+            },
+            {
+              n: 'Design Systems & Scalability',
+              d: 'Scalable component libraries that grow with your product and unify every touchpoint.',
+            },
+            {
+              n: 'Stakeholder & Cross-functional Facilitation',
+              d: 'Translating between engineering, business, and users — keeping every team aligned.',
+            },
+            {
+              n: 'Regulated-industry Domain Expertise',
+              d: 'Deep familiarity with healthtech, fintech, and insurtech constraints and compliance.',
+            },
           ].map((s, i) => (
-            <div key={i} style={{
-              padding: '2rem 1.75rem',
-              borderRight: (i + 1) % 3 !== 0 ? `1px solid ${C.border}` : 'none',
-              borderBottom: i < 3 ? `1px solid ${C.border}` : 'none',
-            }}>
-              <div style={{ fontFamily: C.font, fontSize: '0.65rem', fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: C.gold, marginBottom: '0.75rem' }}>
+            <div
+              key={i}
+              className="skill-card"
+              style={{
+                padding: '2rem 1.75rem',
+              }}
+            >
+              <div
+                style={{
+                  fontFamily: C.font,
+                  fontSize: '0.65rem',
+                  fontWeight: 700,
+                  letterSpacing: '0.14em',
+                  textTransform: 'uppercase',
+                  color: C.gold,
+                  marginBottom: '0.75rem',
+                }}
+              >
                 {String(i + 1).padStart(2, '0')}
               </div>
-              <h3 style={{ fontFamily: C.font, fontSize: '0.95rem', fontWeight: 700, color: C.ink, margin: '0 0 0.5rem' }}>{s.n}</h3>
-              <p style={{ fontFamily: C.font, fontSize: '0.83rem', fontWeight: 400, lineHeight: 1.75, color: C.muted, margin: 0 }}>{s.d}</p>
+
+              <h3
+                style={{
+                  fontFamily: C.font,
+                  fontSize: '0.95rem',
+                  fontWeight: 700,
+                  color: C.ink,
+                  margin: '0 0 0.5rem',
+                }}
+              >
+                {s.n}
+              </h3>
+
+              <p
+                style={{
+                  fontFamily: C.font,
+                  fontSize: '0.83rem',
+                  fontWeight: 400,
+                  lineHeight: 1.75,
+                  color: C.muted,
+                  margin: 0,
+                }}
+              >
+                {s.d}
+              </p>
             </div>
           ))}
         </div>
@@ -1042,6 +1124,7 @@ function HomePage({ setPage, onContact }: { setPage: (p: Page) => void; onContac
 
 // ── Tool chip ─────────────────────────────────────────────────────────────────
 
+
 function ToolChip({
   name,
   src,
@@ -1054,28 +1137,11 @@ function ToolChip({
   abbr?: string
 }) {
   const [hov, setHov] = useState(false)
-  const [inView, setInView] = useState(false)
-  const wrapRef = useRef<HTMLDivElement>(null)
 
-  // On mobile, reveal the real logo simply by being visible on screen —
-  // no tap required, since hover doesn't reliably fire on touch anyway.
-  useEffect(() => {
-    const el = wrapRef.current
-    if (!el) return
-    const obs = new IntersectionObserver(
-      ([entry]) => setInView(entry.isIntersecting),
-      { threshold: 0.6 }
-    )
-    obs.observe(el)
-    return () => obs.disconnect()
-  }, [])
-
-  const revealed = hov // tooltip + desktop tint: real hover only
-  const showLogo = hov || inView // mobile logo/abbr swap can also trigger just by scrolling into view
+  const revealed = hov
 
   return (
     <div
-      ref={wrapRef}
       style={{
         position: 'relative',
         display: 'flex',
@@ -1085,8 +1151,14 @@ function ToolChip({
       }}
       onMouseEnter={() => setHov(true)}
       onMouseLeave={() => setHov(false)}
+      onClick={(e) => {
+        if (window.matchMedia('(max-width: 480px)').matches) {
+          e.stopPropagation()
+          setHov(prev => !prev)
+        }
+      }}
     >
-      {/* Tooltip — desktop hover only; hidden outright on mobile via CSS */}
+      {/* Tooltip */}
       <div
         className="tool-chip-tooltip"
         style={{
@@ -1129,7 +1201,7 @@ function ToolChip({
 
       {/* Logo box */}
       <div
-        className={`tool-chip-box${showLogo ? ' is-hovered' : ''}`}
+        className="tool-chip-box"
         style={{
           position: 'relative',
           width: 56,
@@ -1143,7 +1215,7 @@ function ToolChip({
           alignItems: 'center',
           justifyContent: 'center',
           transition: 'background 0.2s, border-color 0.2s',
-          cursor: 'default',
+          cursor: 'pointer',
         }}
       >
         <img
@@ -1159,26 +1231,6 @@ function ToolChip({
             transform: revealed ? 'scale(1.08)' : 'scale(1)',
           }}
         />
-        {abbr && (
-          <span
-            className="tool-chip-abbr"
-            style={{
-              display: 'none',
-              position: 'absolute',
-              inset: 0,
-              alignItems: 'center',
-              justifyContent: 'center',
-              fontFamily: C.font,
-              fontSize: 12,
-              fontWeight: 800,
-              letterSpacing: '0.24px',
-              color: C.muted,
-              transition: 'opacity 0.2s',
-            }}
-          >
-            {abbr}
-          </span>
-        )}
       </div>
     </div>
   )
@@ -1188,6 +1240,7 @@ function hexToRgb(hex: string) {
   const r = parseInt(hex.slice(1, 3), 16)
   const g = parseInt(hex.slice(3, 5), 16)
   const b = parseInt(hex.slice(5, 7), 16)
+
   return `${r},${g},${b}`
 }
 
@@ -1245,9 +1298,9 @@ const TOOLS = [
   { name: 'Dovetail',   src: dovetailLogo,   accent: '#F43F5E' },
   { name: 'Loom AI',    src: loomLogo,       accent: '#625DF5' },
   { name: 'Framer',     src: framerLogo,     accent: '#0055FF' },
-  { name: 'Miro AI',    src: miroLogo,       accent: '#FFD02F' },
-  { name: 'Survey Monkey',    src: groupLogo,       accent: '#FFD02F' },
-  { name: 'Trello',    src: TelloLogo,       accent: '#FFD02F' },
+  { name: 'Miro AI',    src: miroLogo,       accent: '#FF6B6B' },
+  { name: 'Survey Monkey',    src: groupLogo,       accent: '#579DFF' },
+  { name: 'Trello',    src: TelloLogo,       accent: '#A78BFA' },
 ]
 
 const SKILLS_ABOUT = [
