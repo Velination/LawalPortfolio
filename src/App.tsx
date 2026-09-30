@@ -1140,11 +1140,10 @@ function ToolChip({
   activeTool: string | null
   setActiveTool: React.Dispatch<React.SetStateAction<string | null>>
 }) {
-  const isMobile = window.matchMedia('(max-width: 480px)').matches
-  const revealed = isMobile
-    ? activeTool === name
-    : undefined
-
+  // `revealed` must mean the same thing on every viewport — only *how*
+  // it gets set (hover vs. tap) differs by breakpoint.
+  const revealed = activeTool === name
+ 
   return (
     <div
       style={{
@@ -1177,9 +1176,7 @@ function ToolChip({
           position: 'absolute',
           bottom: '100%',
           left: '50%',
-          transform: `translateX(-50%) translateY(${
-            revealed ? '-6px' : '0px'
-          })`,
+          transform: `translateX(-50%) translateY(${revealed ? '-6px' : '0px'})`,
           background: '#1a1a1a',
           border: `1px solid ${C.border}`,
           borderRadius: 6,
@@ -1197,7 +1194,7 @@ function ToolChip({
         }}
       >
         {name}
-
+ 
         <div
           style={{
             position: 'absolute',
@@ -1212,19 +1209,18 @@ function ToolChip({
           }}
         />
       </div>
-
+ 
       {/* Logo box */}
       <div
-        className="tool-chip-box"
+        className={`tool-chip-box${revealed ? ' is-hovered' : ''}`}
         style={{
           position: 'relative',
           width: 56,
           height: 56,
           borderRadius: 14,
-          background:
-            revealed
-              ? `rgba(${hexToRgb(accent)}, 0.1)`
-              : 'rgba(238,236,232,0.04)',
+          background: revealed
+            ? `rgba(${hexToRgb(accent)}, 0.1)`
+            : 'rgba(238,236,232,0.04)',
           border: `1px solid ${revealed ? accent : C.border}`,
           display: 'flex',
           alignItems: 'center',
@@ -1246,6 +1242,26 @@ function ToolChip({
             transform: revealed ? 'scale(1.08)' : 'scale(1)',
           }}
         />
+        {abbr && (
+          <span
+            className="tool-chip-abbr"
+            style={{
+              display: 'none',
+              position: 'absolute',
+              inset: 0,
+              alignItems: 'center',
+              justifyContent: 'center',
+              fontFamily: C.font,
+              fontSize: 12,
+              fontWeight: 800,
+              letterSpacing: '0.24px',
+              color: C.muted,
+              transition: 'opacity 0.2s',
+            }}
+          >
+            {abbr}
+          </span>
+        )}
       </div>
     </div>
   )
