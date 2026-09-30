@@ -1313,8 +1313,8 @@ function LogoMarquee() {
 // ── About Page ────────────────────────────────────────────────────────────────
 
 const EXPERIENCES = [
-  { period: 'Mar 2023 – Nov 2023', role: 'Intern Product Designer', company: 'Handiworker',          location: 'Remote', current: false },
-  { period: 'Aug 2023 – Feb 2024', role: 'Intern Product Designer', company: 'Fiducia Data Service', location: 'Remote', current: false },
+  { period: 'Mar 2023 – Nov 2023', role: 'Product Designer', company: 'Handiworker',          location: 'Remote', current: false },
+  { period: 'Aug 2023 – Feb 2024', role: 'Product Designer', company: 'Fiducia Data Service', location: 'Remote', current: false },
   { period: 'Feb 2024 – Apr 2025', role: 'Product Designer',        company: 'Stringify Consulting', location: 'Remote', current: false },
   { period: 'Apr 2025 – Present',  role: 'Product Designer',        company: 'Ha-Shem Consulting',   location: 'Remote', current: true  },
 ]
