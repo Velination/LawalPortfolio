@@ -619,7 +619,7 @@ function Marquee() {
 
 const FEATURED = [
   {
-    img: prosHQ, name: 'ProsHQ', type: 'Web Platform', year: '2024',
+    img: prosHQ, name: 'ProsHQ', type: 'Web Platform', year: '2026',
     desc: 'Trust-first marketplace connecting Nigerian professionals with vetted service providers.',
     bg: 'linear-gradient(160deg, #0d1410 0%, #0a0a0a 60%)',
     num: '01',
@@ -631,7 +631,7 @@ const FEATURED = [
     num: '02',
   },
   {
-    img: surebase, name: 'Surebase', type: 'Web Platform', year: '2024',
+    img: surebase, name: 'Surebase', type: 'Web Platform', year: '2026',
     desc: 'B2B insurance aggregation platform unifying an entire industry on one API.',
     bg: 'linear-gradient(160deg, #0e0a16 0%, #0a0a0a 60%)',
     num: '03',
