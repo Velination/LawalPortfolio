@@ -1549,9 +1549,9 @@ function AboutPage({ setPage }: { setPage: (p: Page) =>
 
 function ProjectsPage({ setPage }: { setPage: (p: Page) => void }) {
   const projects = [
-    { img: prosHQ,   name: 'ProsHQ',   type: 'Web Platform', year: '2024', mission: 'Connect busy Nigerian professionals with vetted, reliable service providers — within hours.', desc: 'A trust-first web platform with escrow-protected payments, background-checked provider profiles, and a booking flow that converts at every step.', tags: ['UX Research', 'Web Design', 'Design System', 'Prototyping'] },
+    { img: prosHQ,   name: 'ProsHQ',   type: 'Web Platform', year: '2026', mission: 'Connect busy Nigerian professionals with vetted, reliable service providers — within hours.', desc: 'A trust-first web platform with escrow-protected payments, background-checked provider profiles, and a booking flow that converts at every step.', tags: ['UX Research', 'Web Design', 'Design System', 'Prototyping'] },
     { img: myQura,   name: 'MyQura',   type: 'Mobile App',   year: '2024', mission: 'Healthcare is about restoring dignity, creating access, and weaving families and caregivers together.', desc: 'Dual user journeys for caregivers and patients — unified by a compassionate, accessible interface on iOS and Android.', tags: ['Mobile Design', 'Dual-Role UX', 'Accessibility', 'iOS & Android'] },
-    { img: surebase, name: 'Surebase', type: 'Web Platform', year: '2024', mission: 'A B2B insurance aggregation platform consolidating all insurance products into a single, unified API.', desc: 'Enterprise-grade insurance infrastructure. Designed for scalability and multi-tenancy — translating complex API data into dashboards brokers trust.', tags: ['B2B Design', 'Dashboard UX', 'Design System', 'Enterprise'] },
+    { img: surebase, name: 'Surebase', type: 'Web Platform', year: '2026', mission: 'A B2B insurance aggregation platform consolidating all insurance products into a single, unified API.', desc: 'Enterprise-grade insurance infrastructure. Designed for scalability and multi-tenancy — translating complex API data into dashboards brokers trust.', tags: ['B2B Design', 'Dashboard UX', 'Design System', 'Enterprise'] },
   ]
 
   return (
@@ -1828,7 +1828,7 @@ function ProsHQPage({ setPage }: { setPage: (p: Page) => void }) {
 
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 480px', gap: '4rem', alignItems: 'center' }} className="about-3col">
           <div>
-            <SectionLabel>Case Study · 2024</SectionLabel>
+            <SectionLabel>Case Study · 2026</SectionLabel>
             <h1 style={{
               fontFamily: C.font, fontWeight: 800,
               fontSize: 'clamp(3rem, 6vw, 5.5rem)',
@@ -3309,7 +3309,7 @@ function SurebasePage({ setPage }: { setPage: (p: Page) => void }) {
             </p>
 
              <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', marginBottom: '2rem' }}>
-              {['B2B Platform', 'Insurance Infrastructure', 'Web Platform', '2024'].map(t => (
+              {['B2B Platform', 'Insurance Infrastructure', 'Web Platform', '2026'].map(t => (
                 <span key={t} style={{ fontFamily: C.font, fontSize: '0.68rem', fontWeight: 600, letterSpacing: '0.08em', textTransform: 'uppercase', color: C.muted, background: C.panel, border: `1px solid ${C.border}`, padding: '0.28rem 0.65rem', borderRadius: 100 }}>{t}</span>
               ))}
             </div>
@@ -3319,7 +3319,7 @@ function SurebasePage({ setPage }: { setPage: (p: Page) => void }) {
                 { n: '5', l: 'User Groups' },
                 { n: '4+', l: 'Dashboards' },
                 { n: '7', l: 'API Categories' },
-                { n: '2024', l: 'Year Delivered' },
+                { n: '2026', l: 'Year Delivered' },
               ].map((s, i) => (
                 <div key={i} style={{ padding: '1.5rem 1.25rem', borderRight: i % 2 === 0 ? `1px solid ${C.border}` : 'none', borderBottom: i < 2 ? `1px solid ${C.border}` : 'none', background: C.panel }}>
                   <div style={{ fontFamily: C.font, fontSize: 'clamp(1.6rem, 2.5vw, 2.2rem)', fontWeight: 800, color: C.gold, letterSpacing: '-0.03em', lineHeight: 1, marginBottom: '0.35rem' }}>{s.n}</div>
